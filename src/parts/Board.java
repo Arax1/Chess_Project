@@ -41,4 +41,13 @@ public class Board {
 		return board[row - 1][col - 1];
 		
 	}
+	
+	public Piece getPieceAt(String s) {
+		
+		Square sq = getTileAt(s);
+		if(sq.filled)
+			return sq.p;
+		
+		return null;
+	}
 }
