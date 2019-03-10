@@ -13,13 +13,13 @@ public class Bishop implements Piece {
 	}
 	
 	@Override
-	public boolean threatens(int r, int c, Square[][] board) {
+	public boolean threatens(int c, int r, Square[][] board) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean moveTo(int r, int c, Square[][] board) {
+	public boolean moveTo(int c, int r, Square[][] board) {
 		// TODO Auto-generated method stub
 		return false;
 	}
