@@ -18,6 +18,11 @@ public class Square {
 		filled = true;
 	}
 	
+	public void putPiece(Piece in) {
+		p = in;
+		filled = true;
+	}
+	
 	public String toString() {
 		if(!filled) {
 			if(row + column % 2 == 0)
