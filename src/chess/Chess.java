@@ -9,14 +9,13 @@ public class Chess {
 		
 		int turns = 0;
 		
-		Board chess_board = new Board();
+		Square[][] board = makeBoard();
 		Scanner scan = new Scanner(System.in);
 		String player = "White";
 		String str;
 		
 		while (true) {
 			
-			chess_board.printBoard();
 			
 			player = turns % 2 == 0 ? "White" : "Black";
 			
@@ -26,9 +25,6 @@ public class Chess {
 			if(!str.equals("resign"))
 			{
 					String[] arr = str.split(" ");
-					Square s1 = chess_board.getTileAt(arr[0]);
-					Square s2 = chess_board.getTileAt(arr[1]);
-					System.out.println(player + " moved from" + s1 + " to " + s2);
 					turns++;
 			}
 			
@@ -44,6 +40,33 @@ public class Chess {
 		turns++;
 		System.out.println(player + " wins!");
 		
+	}
+	
+	public static Square[][] makeBoard() {
+		Square[][] ret = new Square[8][8];
+		
+		for(int column = 0; column < 8; column++)
+			for(int row = 0; row < 8; row++) {
+				if(row > 1 && row < 6) {
+					//we are in the middle columns, no pieces to start
+					ret[column][row] = new Square(column,row);
+				
+				} else {
+					// there should be pieces in this square
+					// [0,0] is bottom left, [7,7] is top right
+					
+					if(row == 1 || row == 6) {
+						//we have a pawn!
+						Pawn p = new Pawn(column,row);
+						ret[column][row] = new Square(column,row,p);
+					
+					} else {
+						//we have some other piece
+					}
+				}
+			}
+		
+		return ret;
 	}
 	
 }

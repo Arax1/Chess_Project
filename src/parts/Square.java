@@ -2,16 +2,16 @@ package parts;
 
 public class Square {
 	public boolean filled;
-	public int row, column;
+	public int column, row;
 	public Piece p;
 	
-	public Square(int r, int c) {
+	public Square(int c, int r) {
 		row = r;
 		column = c;
 		filled = false;
 	}
 	
-	public Square(int r, int c, Piece in) {
+	public Square(int c, int r, Piece in) {
 		row = r;
 		column = c;
 		p = in;
