@@ -1,6 +1,8 @@
 package chess;
-import parts.*;
+
 import java.util.Scanner;
+
+import parts.Board;
 
 
 public class Chess {
