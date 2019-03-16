@@ -13,13 +13,13 @@ public class Queen implements Piece {
 	}
 	
 	@Override
-	public boolean threatens(int c, int r, Square[][] board) {
+	public boolean threatens(int c, int r, Board b) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean moveTo(int c, int r, Square[][] board) {
+	public boolean moveTo(int c, int r, Board b) {
 		// TODO Auto-generated method stub
 		return false;
 	}

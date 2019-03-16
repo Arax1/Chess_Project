@@ -13,7 +13,7 @@ public class Rook implements Piece {
 	}
 	
 	@Override
-	public boolean threatens(int c, int r, Square[][] board) {
+	public boolean threatens(int c, int r, Board b) {
 		if(c != column && r != row)
 			return false;
 		
@@ -23,7 +23,7 @@ public class Rook implements Piece {
 		if(c == column) {
 			int direction = (r > row) ? 1 : -1;
 			for(int x = row + direction; x != r; x += direction)
-				if(board[c][x].filled)
+				if(b.board[c][x].filled)
 					return false;
 			
 			return true;
@@ -32,7 +32,7 @@ public class Rook implements Piece {
 		if(r == row) {
 			int direction = (c > column) ? 1 : -1;
 			for(int x = column + direction; x != c; x+= direction)
-				if(board[x][r].filled)
+				if(b.board[x][r].filled)
 					return false;
 			
 			return true;
@@ -41,13 +41,14 @@ public class Rook implements Piece {
 		return false;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
-	public boolean moveTo(int c, int r, Square[][] board) {
-		if(!threatens(c,r,board))
+	public boolean moveTo(int c, int r, Board b) {
+		if(!threatens(c,r,b))
 			return false;
 		
-		if(board[c][r].filled)
-			if(board[c][r].p.color == color)
+		if(b.board[c][r].filled)
+			if(b.board[c][r].p.color == color)
 				return false;
 		
 		column = c;

@@ -35,7 +35,7 @@ public class Pawn implements Piece {
 	}
 
 	@Override
-	public boolean threatens(int c, int r, Square[][] board) {
+	public boolean threatens(int c, int r, Board board) {
 		if(c < 0 || c > 7 || r < 0 || r > 7)
 			return false;
 		
@@ -51,7 +51,7 @@ public class Pawn implements Piece {
 	}
 
 	@Override
-	public boolean moveTo(int newc, int newr, Square[][] board) {
+	public boolean moveTo(int newc, int newr, Board b) {
 		if(color == 'w') {
 			
 			if(newr > 7)
@@ -59,7 +59,7 @@ public class Pawn implements Piece {
 			
 			//check for trying to move 2 forward
 			if(newr == row + 2 && newc == column && !hasmoved 
-					&& !board[newc][newr].filled && !board[newc][newr].filled) {
+					&& !b.board[newc][newr].filled && !b.board[newc][newr].filled) {
 				//if all of these conditions are met, we can do a double-move forward
 				
 				hasmoved = true;
