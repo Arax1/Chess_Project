@@ -2,7 +2,7 @@ package chess;
 
 import java.util.Scanner;
 
-import parts.Board;
+import parts.*;
 
 
 public class Chess {
@@ -28,7 +28,10 @@ public class Chess {
 			
 			if(!str.equals("resign"))
 			{
-					//String[] arr = str.split(" ");
+					String[] arr = str.split(" ");
+					Square s1 = board.getTileAt(arr[0]);
+					Square s2 = board.getTileAt(arr[1]);
+					System.out.println(s1 + " moved to: " + s2);
 					System.out.print("\n");
 					turns++;
 			}
