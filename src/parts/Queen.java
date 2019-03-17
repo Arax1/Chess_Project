@@ -54,26 +54,26 @@ public class Queen implements Piece {
 		int c_mod = (c > column) ? 1 : -1;
 		int r_mod = (r > row) ? 1 : -1;
 		
-		int rindex = row + r_mod;
-		int cindex = column + c_mod;
+		int index_r = row + r_mod;
+		int index_c = column + c_mod;
 		
-		while((rindex > 0) && (rindex < 8) || (cindex > 0) && (cindex < 8)){
+		while((index_r > 0) && (index_r < 8) || (index_c > 0) && (index_c < 8)){
 			
-			if(rindex == r && cindex == c)
+			if(index_r == r && index_c == c)
 				return true;
 			
-			else if(rindex == r && cindex != c)
+			else if(index_r == r && index_c != c)
 				return false;
 			
-			else if(rindex != r && cindex == c)
+			else if(index_r != r && index_c == c)
 				return false;
 			
 			else {
-				if(b.board[cindex][rindex].filled)
+				if(b.board[index_c][index_r].filled)
 					return false;
 				
-				rindex += r_mod;
-				cindex += c_mod;
+				index_r += r_mod;
+				index_c += c_mod;
 			}
 		}
 		
