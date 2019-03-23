@@ -88,7 +88,7 @@ public class Pawn implements Piece {
 		//System.out.println("Destination Row and Collumn: " + newr + " " + newc);
 		
 		int direction = (color == 'w') ? 1 : -1;
-		int hop = (hasmoved) ? 0: direction;
+		int hop = (hasmoved) ? 0 : direction;
 		
 		if(!b.board[column][row + direction].filled) {
 			
@@ -110,11 +110,24 @@ public class Pawn implements Piece {
 		
 		else if(threatens(newc, newr, b)) {
 			
+			//regular taking a piece
 			if(b.board[newc][newr].filled && b.board[newc][newr].p.color == color) {
 				hasmoved = true;
 				row = newr;
 				column = newc;
 				return true;
+			}
+			
+			//en passant
+			else if(b.board[newc][row].filled) {
+				if(b.board[newc][row].p instanceof Pawn) {
+					if(((Pawn)b.board[newc][row].p).justjumped) {
+						hasmoved = true;
+						row = newr;
+						column = newc;
+						return true;
+					}
+				}
 			}
 		}
 			
