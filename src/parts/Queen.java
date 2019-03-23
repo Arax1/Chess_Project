@@ -57,7 +57,7 @@ public class Queen implements Piece {
 		int index_r = row + r_mod;
 		int index_c = column + c_mod;
 		
-		while((index_r > 0) && (index_r < 8) || (index_c > 0) && (index_c < 8)){
+		while((index_r > 0) && (index_r < 7) || (index_c > 0) && (index_c < 7)){
 			
 			if(index_r == r && index_c == c)
 				return true;

@@ -23,6 +23,13 @@ public class Square {
 		filled = true;
 	}
 	
+	public Piece removePiece() {
+		Piece pout = p;
+		p = null;
+		filled = false;
+		return pout;
+	}
+	
 	public String toString() {
 		if(!filled) {
 			if((row + column) % 2 == 0)

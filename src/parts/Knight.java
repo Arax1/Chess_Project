@@ -34,7 +34,7 @@ public class Knight implements Piece {
 		int rindex_2 = rindex_1 + r_mod_2;
 		int cindex_2 = cindex_1 + c_mod_2;
 		
-		if(rindex_1 > 0 && rindex_1 < 7 && cindex_1 > 0 && cindex_1 > 7){
+		if((rindex_1 > 0 && rindex_1 < 7) && (cindex_1 > 0 && cindex_1 < 7)){
 			
 			if(r == rindex_1 && c == cindex_1)
 				return true;
@@ -49,9 +49,14 @@ public class Knight implements Piece {
 		return false;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
 		// TODO Auto-generated method stub
+		
+		//System.out.println("Current Row and Collumn: " + row + " " + column);
+		//System.out.println("Destination Row and Collumn: " + r + " " + c);
+		
 		if(!threatens(c,r,b))
 			return false;
 		

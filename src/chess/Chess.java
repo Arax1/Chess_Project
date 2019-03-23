@@ -31,9 +31,33 @@ public class Chess {
 					String[] arr = str.split(" ");
 					Square s1 = board.getTileAt(arr[0]);
 					Square s2 = board.getTileAt(arr[1]);
-					System.out.println(s1 + " moved to: " + s2);
+					
+					Piece piece = (s1.filled) ? s1.p : null;
+					
+					int new_row = s2.row;
+					int new_col = s2.column;
+					System.out.println(s1 + " getting to: " + s2);
+					
+					if(piece != null) {
+						
+						if(piece.moveTo(new_col, new_row, board)) {
+							System.out.println(s1 + " has moved to: " + s2);
+							board.movePiece(s1, s2);
+							turns++;
+						}
+						
+						else
+						{
+							System.out.println("Invalid Move");
+						}
+						
+					}
+					
+					else
+						System.out.println("Invalid Move");
+					
 					System.out.print("\n");
-					turns++;
+					
 			}
 			
 			else {

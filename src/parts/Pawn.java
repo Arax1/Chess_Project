@@ -1,7 +1,5 @@
 package parts;
 
-import java.util.ArrayList;
-
 public class Pawn implements Piece {
 	public int column, row;
 	public char color;
@@ -50,9 +48,10 @@ public class Pawn implements Piece {
 		return false;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public boolean moveTo(int newc, int newr, Board b) {
-		if(color == 'w') {
+		/* if(color == 'w') {
 			
 			if(newr > 7)
 				return false;
@@ -83,8 +82,42 @@ public class Pawn implements Piece {
 		}
 		
 		//now do the same thing but for black. 
-		//note that pawns actually probably have the most complicated moving rules.
-	
+		//note that pawns actually probably have the most complicated moving rules. */
+		
+		//System.out.println("Current Row and Collumn: " + row + " " + column);
+		//System.out.println("Destination Row and Collumn: " + newr + " " + newc);
+		
+		int direction = (color == 'w') ? 1 : -1;
+		int hop = (hasmoved) ? 0: direction;
+		
+		if(!b.board[column][row + direction].filled) {
+			
+			if(newr == row + direction && newc == column) {
+				hasmoved = true;
+				row = newr;
+				column = newc;
+				return true;
+			}
+			
+			else if(newr == row + direction + hop && newc == column && (!b.board[newc][newr].filled)) {
+				hasmoved = true;
+				row = newr;
+				justjumped = true;
+				column = newc;
+				return true;
+			}
+		}
+		
+		else if(threatens(newc, newr, b)) {
+			
+			if(b.board[newc][newr].filled && b.board[newc][newr].p.color == color) {
+				hasmoved = true;
+				row = newr;
+				column = newc;
+				return true;
+			}
+		}
+			
 		return false;
 	}
 

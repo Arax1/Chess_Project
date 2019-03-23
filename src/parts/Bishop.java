@@ -28,7 +28,7 @@ public class Bishop implements Piece {
 		int rindex = row + r_mod;
 		int cindex = column + c_mod;
 		
-		while((rindex > 0) && (rindex < 8) || (cindex > 0) && (cindex < 8)){
+		while((rindex > 0) && (rindex < 7) || (cindex > 0) && (cindex < 7)){
 			
 			if(rindex == r && cindex == c)
 				return true;
