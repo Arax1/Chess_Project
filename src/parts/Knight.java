@@ -13,6 +13,22 @@ public class Knight implements Piece {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		
+	    if (obj == null) 
+	    	return false;
+	    
+	    if (obj == this) 
+	    	return true;
+	    
+	    if (!(obj instanceof Knight)) 
+	    	return false;
+	    
+	    Knight o = (Knight) obj;
+	    return this.row == o.row && this.column == o.column;
+	}
+	
+	@Override
 	public boolean threatens(int c, int r, Board b) {
 		// TODO Auto-generated method stub
 		
@@ -65,7 +81,7 @@ public class Knight implements Piece {
 		
 		column = c;
 		row = r;
-		b.en_passant = false;
+		b.en_passant = null;
 		return true;
 	}
 	
@@ -74,6 +90,6 @@ public class Knight implements Piece {
 	}
 	
 	public String toString() {
-		return getColor() + "B";
+		return getColor() + "N";
 	}
 }

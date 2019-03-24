@@ -12,6 +12,21 @@ public class Queen implements Piece {
 		color = (r == 7) ? 'b' : 'w';
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+	    if (obj == null) 
+	    	return false;
+	    
+	    if (obj == this) 
+	    	return true;
+	    
+	    if (!(obj instanceof Queen)) 
+	    	return false;
+	    
+	    Queen o = (Queen) obj;
+	    return this.row == o.row && this.column == o.column;
+	}
 	
 	// Reused code from Rook class
 	private boolean threat_lateral(int c, int r, Board b) {
@@ -99,7 +114,7 @@ public class Queen implements Piece {
 		
 		column = c;
 		row = r;
-		
+		b.en_passant = null;
 		return true;
 	}
 
@@ -108,6 +123,6 @@ public class Queen implements Piece {
 	}
 	
 	public String toString() {
-		return getColor() + "B";
+		return getColor() + "Q";
 	}
 }

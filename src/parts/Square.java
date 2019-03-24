@@ -19,8 +19,10 @@ public class Square {
 	}
 	
 	public void putPiece(Piece in) {
+		
 		p = in;
 		filled = true;
+		
 	}
 	
 	

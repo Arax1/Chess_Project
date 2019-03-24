@@ -12,7 +12,21 @@ public class Bishop implements Piece {
 		color = (r == 7) ? 'b' : 'w';
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		
+	    if (obj == null) 
+	    	return false;
+	    
+	    if (obj == this) 
+	    	return true;
+	    
+	    if (!(obj instanceof Bishop)) 
+	    	return false;
+	    
+	    Bishop o = (Bishop) obj;
+	    return this.row == o.row && this.column == o.column;
+	}
 	
 	@Override
 	public boolean threatens(int c, int r, Board b) {

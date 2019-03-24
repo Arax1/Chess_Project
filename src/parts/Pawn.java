@@ -28,6 +28,22 @@ public class Pawn implements Piece {
 		color = c;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+	    if (obj == null) 
+	    	return false;
+	    
+	    if (obj == this) 
+	    	return true;
+	    
+	    if (!(obj instanceof Pawn)) 
+	    	return false;
+	    
+	    Pawn o = (Pawn) obj;
+	    return this.row == o.row && this.column == o.column;
+	}
+	
 	public char getColor() {
 		return color;
 	}
@@ -55,8 +71,8 @@ public class Pawn implements Piece {
 	@Override
 	public boolean moveTo(int newc, int newr, Board b) {
 		
-		//System.out.println("Current Row and Collumn: " + row + " " + column);
-		//System.out.println("Destination Row and Collumn: " + newr + " " + newc);
+		System.out.println("Current Row and Collumn: " + row + " " + column);
+		System.out.println("Destination Row and Collumn: " + newr + " " + newc);
 		
 		int direction = (color == 'w') ? 1 : -1;
 		int hop = (hasmoved) ? 0 : direction;
@@ -67,14 +83,14 @@ public class Pawn implements Piece {
 				hasmoved = true;
 				row = newr;
 				column = newc;
-				b.en_passant = false;
+				b.en_passant = null;
 				return true;
 			}
 			
 			else if(newr == row + direction + hop && newc == column && (!b.board[newc][newr].filled)) {
 				hasmoved = true;
 				row = newr;
-				b.en_passant = true;
+				b.en_passant = this;
 				column = newc;
 				return true;
 			}
@@ -83,25 +99,25 @@ public class Pawn implements Piece {
 		if(threatens(newc, newr, b)) {
 			
 			//regular taking a piece
-			if(b.board[newc][newr].filled && b.board[newc][newr].p.getColor() == color) {
+			if(b.board[newc][newr].filled && b.board[newc][newr].p.getColor() != color) {
 				hasmoved = true;
 				row = newr;
 				column = newc;
-				b.en_passant = false;
+				b.en_passant = null;
 				return true;
 			}
 			
 			//en passant
 			else if(b.board[newc][row].filled) {
 				if(b.board[newc][row].p instanceof Pawn) {
-					if(b.en_passant) {
+					if(b.board[newc][row].p.equals(b.en_passant)) {
 						
 						@SuppressWarnings("unused")
 						Piece pas = b.board[newc][row].removePiece();
 						hasmoved = true;
 						row = newr;
 						column = newc;
-						b.en_passant = false;
+						b.en_passant = null;
 						return true;
 					}
 				}

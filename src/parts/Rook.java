@@ -13,6 +13,22 @@ public class Rook implements Piece {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		
+	    if (obj == null) 
+	    	return false;
+	    
+	    if (obj == this) 
+	    	return true;
+	    
+	    if (!(obj instanceof Rook)) 
+	    	return false;
+	    
+	    Rook o = (Rook) obj;
+	    return this.row == o.row && this.column == o.column;
+	}
+	
+	@Override
 	public boolean threatens(int c, int r, Board b) {
 		if(c != column && r != row)
 			return false;
@@ -52,7 +68,7 @@ public class Rook implements Piece {
 		
 		column = c;
 		row = r;
-		b.en_passant = false;
+		b.en_passant = null;
 		return true;
 	}
 
@@ -61,6 +77,6 @@ public class Rook implements Piece {
 	}
 	
 	public String toString() {
-		return getColor() + "B";
+		return getColor() + "R";
 	}
 }
