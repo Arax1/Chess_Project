@@ -34,13 +34,13 @@ public class Knight implements Piece {
 		int rindex_2 = rindex_1 + r_mod_2;
 		int cindex_2 = cindex_1 + c_mod_2;
 		
-		if((rindex_1 > 0 && rindex_1 < 7) && (cindex_1 > 0 && cindex_1 < 7)){
+		if((rindex_1 >= 0 && rindex_1 < 8) && (cindex_1 >= 0 && cindex_1 < 8)){
 			
 			if(r == rindex_1 && c == cindex_1)
 				return true;
 		}
 		
-		else if(rindex_2 > 0 && rindex_2 < 7 && cindex_2 > 0 && cindex_2 < 7){
+		else if(rindex_2 >= 0 && rindex_2 < 8 && cindex_2 >= 0 && cindex_2 < 8){
 			
 			if(r == rindex_2 && c == cindex_2)
 				return true;
