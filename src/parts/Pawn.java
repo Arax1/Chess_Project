@@ -4,7 +4,7 @@ public class Pawn implements Piece {
 	public int column, row;
 	private char color;
 	
-	public boolean hasmoved = false, justjumped = false;
+	public boolean hasmoved = false;
 	
 	//given a row, column and color
 	public Pawn(int c, int r, char co) {
@@ -54,38 +54,6 @@ public class Pawn implements Piece {
 
 	@Override
 	public boolean moveTo(int newc, int newr, Board b) {
-		/* if(color == 'w') {
-			
-			if(newr > 7)
-				return false;
-			
-			//check for trying to move 2 forward
-			if(newr == row + 2 && newc == column && !hasmoved 
-					&& !b.board[newc][newr].filled && !b.board[newc][newr].filled) {
-				//if all of these conditions are met, we can do a double-move forward
-				
-				hasmoved = true;
-				justjumped = true;
-				row = newr;
-				column = newc;
-				return true;
-			}
-			
-			//check for trying to move 1 forward
-			if(true) {
-				
-			}
-			
-			//check for taking diagonally, not en passant
-			if(true) {
-				
-			}
-			
-			//check for en passant
-		}
-		
-		//now do the same thing but for black. 
-		//note that pawns actually probably have the most complicated moving rules. */
 		
 		//System.out.println("Current Row and Collumn: " + row + " " + column);
 		//System.out.println("Destination Row and Collumn: " + newr + " " + newc);
@@ -99,13 +67,14 @@ public class Pawn implements Piece {
 				hasmoved = true;
 				row = newr;
 				column = newc;
+				b.en_passant = false;
 				return true;
 			}
 			
 			else if(newr == row + direction + hop && newc == column && (!b.board[newc][newr].filled)) {
 				hasmoved = true;
 				row = newr;
-				justjumped = true;
+				b.en_passant = true;
 				column = newc;
 				return true;
 			}
@@ -118,16 +87,21 @@ public class Pawn implements Piece {
 				hasmoved = true;
 				row = newr;
 				column = newc;
+				b.en_passant = false;
 				return true;
 			}
 			
 			//en passant
 			else if(b.board[newc][row].filled) {
 				if(b.board[newc][row].p instanceof Pawn) {
-					if(((Pawn)b.board[newc][row].p).justjumped) {
+					if(b.en_passant) {
+						
+						@SuppressWarnings("unused")
+						Piece pas = b.board[newc][row].removePiece();
 						hasmoved = true;
 						row = newr;
 						column = newc;
+						b.en_passant = false;
 						return true;
 					}
 				}

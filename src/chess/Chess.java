@@ -15,19 +15,21 @@ public class Chess {
 		
 		Scanner scan = new Scanner(System.in);
 		String player = "White";
+		char pc = 'w';
 		String str;
 		
 		while (true) {
 			
 			board.printBoard();
 			
+			pc = turns % 2 == 0 ? 'w' : 'b';
 			player = turns % 2 == 0 ? "White" : "Black";
 			
 			System.out.print(player + "'s move: ");
 			str = scan.nextLine();
 			
-			if(!str.equals("resign"))
-			{
+			if(!str.equals("resign")) {
+				
 					String[] arr = str.split(" ");
 					Square s1 = board.getTileAt(arr[0]);
 					Square s2 = board.getTileAt(arr[1]);
@@ -38,19 +40,12 @@ public class Chess {
 					int new_col = s2.column;
 					System.out.println(s1 + " getting to: " + s2);
 					
-					if(piece != null) {
+					if(piece != null && piece.getColor() == pc && piece.moveTo(new_col, new_row, board)) {
 						
-						if(piece.moveTo(new_col, new_row, board)) {
-							System.out.println(s1 + " has moved to: " + s2);
-							board.movePiece(s1, s2);
-							turns++;
-						}
-						
-						else
-						{
-							System.out.println("Invalid Move");
-						}
-						
+						System.out.println(s1 + " has moved to: " + s2);
+						board.movePiece(s1, s2);
+						turns++;
+												
 					}
 					
 					else
@@ -62,6 +57,7 @@ public class Chess {
 			
 			else {
 				turns++;
+				pc = turns % 2 == 0 ? 'w' : 'b';
 				player = turns % 2 == 0 ? "White" : "Black";
 				break;
 			}

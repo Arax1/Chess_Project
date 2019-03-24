@@ -99,6 +99,7 @@ public class Queen implements Piece {
 		
 		column = c;
 		row = r;
+		b.en_passant = false;
 		return true;
 	}
 
