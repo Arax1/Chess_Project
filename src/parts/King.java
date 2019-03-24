@@ -3,7 +3,7 @@ package parts;
 public class King implements Piece {
 
 	public int column, row;
-	public char color;
+	private char color;
 	
 	public King(int c, int r) {
 		column = c;
@@ -24,7 +24,11 @@ public class King implements Piece {
 		return false;
 	}
 
+	public char getColor() {
+		return color;
+	}
+	
 	public String toString() {
-		return color + "K";
+		return getColor() + "B";
 	}
 }

@@ -3,7 +3,7 @@ package parts;
 public class Bishop implements Piece {
 
 	public int column, row;
-	public char color;
+	private char color;
 	
 	public Bishop(int c, int r) {
 		column = c;
@@ -52,23 +52,34 @@ public class Bishop implements Piece {
 		
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
 		// TODO Auto-generated method stub
+		
+		//System.out.println("Current Row and Collumn: " + row + " " + column);
+		//System.out.println("Destination Row and Collumn: " + r + " " + c);
+		
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.board[c][r].filled)
-			if(b.board[c][r].p.color == color)
+		if(b.board[c][r].filled) {
+			char pcolor = b.board[c][r].p.getColor();
+			System.out.println("Piece: " + b.board[c][r].p + " Color: " + pcolor );
+			if(b.board[c][r].p.getColor() == color)
 				return false;
+		}
+			
 		
 		column = c;
 		row = r;
 		return true;
 	}
 
+	public char getColor() {
+		return color;
+	}
+	
 	public String toString() {
-		return color + "B";
+		return getColor() + "B";
 	}
 }

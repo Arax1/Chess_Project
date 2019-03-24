@@ -3,7 +3,7 @@ package parts;
 public class Rook implements Piece {
 
 	public int column, row;
-	public char color;
+	private char color;
 	
 	public Rook(int c, int r) {
 		column = c;
@@ -41,14 +41,13 @@ public class Rook implements Piece {
 		return false;
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
 		if(!threatens(c,r,b))
 			return false;
 		
 		if(b.board[c][r].filled)
-			if(b.board[c][r].p.color == color)
+			if(b.board[c][r].p.getColor() == color)
 				return false;
 		
 		column = c;
@@ -56,7 +55,11 @@ public class Rook implements Piece {
 		return true;
 	}
 
+	public char getColor() {
+		return color;
+	}
+	
 	public String toString() {
-		return color + "R";
+		return getColor() + "B";
 	}
 }

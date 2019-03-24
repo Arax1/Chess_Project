@@ -3,7 +3,7 @@ package parts;
 public class Queen implements Piece {
 
 	public int column, row;
-	public char color;
+	private char color;
 	
 	public Queen(int c, int r) {
 		column = c;
@@ -87,7 +87,6 @@ public class Queen implements Piece {
 		return threat_lateral(c, r, b) || threat_diagonal(c, r, b);
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
 		// TODO Auto-generated method stub
@@ -95,7 +94,7 @@ public class Queen implements Piece {
 			return false;
 		
 		if(b.board[c][r].filled)
-			if(b.board[c][r].p.color == color)
+			if(b.board[c][r].p.getColor() == color)
 				return false;
 		
 		column = c;
@@ -103,7 +102,11 @@ public class Queen implements Piece {
 		return true;
 	}
 
+	public char getColor() {
+		return color;
+	}
+	
 	public String toString() {
-		return color + "Q";
+		return getColor() + "B";
 	}
 }

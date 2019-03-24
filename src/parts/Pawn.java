@@ -2,7 +2,7 @@ package parts;
 
 public class Pawn implements Piece {
 	public int column, row;
-	public char color;
+	private char color;
 	
 	public boolean hasmoved = false, justjumped = false;
 	
@@ -28,8 +28,12 @@ public class Pawn implements Piece {
 		color = c;
 	}
 	
+	public char getColor() {
+		return color;
+	}
+	
 	public String toString() {
-		return color + "P";
+		return getColor() + "P";
 	}
 
 	@Override
@@ -48,7 +52,6 @@ public class Pawn implements Piece {
 		return false;
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	public boolean moveTo(int newc, int newr, Board b) {
 		/* if(color == 'w') {
@@ -108,10 +111,10 @@ public class Pawn implements Piece {
 			}
 		}
 		
-		else if(threatens(newc, newr, b)) {
+		if(threatens(newc, newr, b)) {
 			
 			//regular taking a piece
-			if(b.board[newc][newr].filled && b.board[newc][newr].p.color == color) {
+			if(b.board[newc][newr].filled && b.board[newc][newr].p.getColor() == color) {
 				hasmoved = true;
 				row = newr;
 				column = newc;
