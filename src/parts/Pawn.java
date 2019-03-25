@@ -140,21 +140,11 @@ public class Pawn implements Piece {
 		return column;
 	}
 
-	/*public static void main(String[] args) {
-		Pawn wp = new Pawn(4,1);
-		Pawn bp = new Pawn(4,6);
-		
-		Square[][] b = new Square[1][1];
-		
-		
-		System.out.println(wp.threatens(3,2,b));
-		System.out.println(wp.threatens(4,0,b));
-		System.out.println(wp.threatens(5,0,b));
-		System.out.println(bp.threatens(3,5,b));
-		System.out.println(bp.threatens(4,7,b));
-		System.out.println(bp.threatens(5,7,b));
-		
-	}*/
+	@Override
+	public Square[] getAllMoves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 }

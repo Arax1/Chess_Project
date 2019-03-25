@@ -103,4 +103,10 @@ public class Knight implements Piece {
 	public String toString() {
 		return getColor() + "N";
 	}
+
+	@Override
+	public Square[] getAllMoves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -94,4 +94,10 @@ public class King implements Piece {
 	public String toString() {
 		return getColor() + "K";
 	}
+
+	@Override
+	public Square[] getAllMoves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -107,4 +107,10 @@ public class Bishop implements Piece {
 	public String toString() {
 		return getColor() + "B";
 	}
+
+	@Override
+	public Square[] getAllMoves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

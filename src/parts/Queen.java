@@ -137,4 +137,10 @@ public class Queen implements Piece {
 	public String toString() {
 		return getColor() + "Q";
 	}
+
+	@Override
+	public Square[] getAllMoves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

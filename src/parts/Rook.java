@@ -91,4 +91,10 @@ public class Rook implements Piece {
 	public String toString() {
 		return getColor() + "R";
 	}
+
+	@Override
+	public Square[] getAllMoves() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

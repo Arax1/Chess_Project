@@ -62,7 +62,7 @@ public class Chess {
 
 					if(!checks.isEmpty()) {
 						
-						checkmate = resolve_check();
+						checkmate = resolve_check(board, king);
 					}
 					
 			}
@@ -83,7 +83,11 @@ public class Chess {
 	}
 	
 	// where you determine if there's checkmate or not;
-	public static boolean resolve_check() {
+	public static boolean resolve_check(Board b, King k) {
+		
+		//basically, just brute force check every possible location
+		Board newboard = b;
+		
 		return false;
 	}
 	
