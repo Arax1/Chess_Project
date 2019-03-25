@@ -93,15 +93,6 @@ public class Board {
 		System.out.println("\n");
 	}
 	
-	public Square getTileAt(String s) {
-		
-		int row = s.charAt(0) - 'a' + 1;
-		int col = Character.getNumericValue(s.charAt(1));
-		
-		return board[row - 1][col - 1];
-		
-	}
-	
 	public void addPiecePlay(int c, int r, Piece p) {
 		
 		board[c][r].putPiece(p);
@@ -128,9 +119,22 @@ public class Board {
 		
 	}
 	
-	public Square getTileAt(int r, int c) {
+	public Square getTileAt(int c, int r) {
 		
-		return board[r][c];
+		return board[c][r];
+		
+	}
+	
+	public Square getTileAt(Square s) {
+		return getTileAt(s.column, s.row);
+	}
+	
+	public Square getTileAt(String s) {
+		
+		int row = s.charAt(0) - 'a' + 1;
+		int col = Character.getNumericValue(s.charAt(1));
+		
+		return board[row - 1][col - 1];
 		
 	}
 	
@@ -153,6 +157,23 @@ public class Board {
 		
 	}
 	
+	public void movePiece(int oc, int or, int nc, int nr) {
+		Piece piece = board[oc][or].removePiece();
+		
+		if(board[nc][nr].filled) {
+			
+			Piece captured = board[nc][nr].removePiece();
+			
+			if(captured.getColor() == 'w')
+				white_pieces.remove(captured);
+			
+			else
+				black_pieces.remove(captured);
+		}
+		
+		board[nc][nr].putPiece(piece);
+	}
+	
 	public static <T> List<T> filter(List<T> list, Predicate<T> p){
 		
 		List<T> result = new ArrayList<T>();
@@ -165,8 +186,7 @@ public class Board {
 		
 		return result;
 	}
-	
-
+		
 	public List<Piece> threatens_spot(List<Piece> list, int c, int r) {
 		// TODO Auto-generated method stub
 		return filter(list, p -> p.threatens(c, r, this));

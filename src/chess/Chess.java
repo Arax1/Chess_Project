@@ -1,9 +1,13 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import parts.*;
+import parts.Board;
+import parts.King;
+import parts.Piece;
+import parts.Square;
 
 
 public class Chess {
@@ -62,7 +66,8 @@ public class Chess {
 
 					if(!checks.isEmpty()) {
 						
-						checkmate = resolve_check(board, king);
+						//check for checkmate on OPPOSING king
+						checkmate = resolve_check(board, (King)((pc == 'b')? board.white_king : board.black_king));
 					}
 					
 			}
@@ -87,6 +92,21 @@ public class Chess {
 		
 		//basically, just brute force check every possible location
 		Board newboard = b;
+		ArrayList<Piece> enemies = (k.getColor() == 'w') ? newboard.black_pieces : newboard.white_pieces;
+		Piece temp = null;
+		
+		for(Piece p: enemies) {
+			for(Square s: p.getAllMoves()) {
+				
+				//if filled, save the piece for later
+				if(b.getTileAt(s).filled) {
+					temp = b.getTileAt(s).p;
+				}
+				
+				//test the move
+				
+			}
+		}
 		
 		return false;
 	}
