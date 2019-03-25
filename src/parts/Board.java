@@ -1,12 +1,24 @@
 package parts;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.*;
+
 public class Board {
 	
 	public Square[][] board;
+	public ArrayList<Piece> black_pieces;
+	public ArrayList<Piece> white_pieces;
+	
+	public Piece en_passant = null;
+	public Piece black_king;
+	public Piece white_king;
 	
 	public Board() {
 		
 		board = new Square[8][8];
+		black_pieces = new ArrayList<Piece>();
+		white_pieces = new ArrayList<Piece>();
 		
 		for(int column = 0; column < 8; column++)
 			for(int row = 0; row < 8; row++) {
@@ -18,7 +30,8 @@ public class Board {
 					
 					if(row == 1 || row == 6) {
 						//we have a pawn!
-						board[column][row].putPiece(new Pawn(column,row));
+						Pawn p = new Pawn(column, row);
+						addPiecePlay(p.getColumn(), p.getRow(), p);
 					
 					} else {
 						//we have some other piece
@@ -26,27 +39,32 @@ public class Board {
 						
 						case 0: case 7:
 							//rook
-							board[column][row].putPiece(new Rook(column, row));
+							Rook r = new Rook(column, row);
+							addPiecePlay(r.getColumn(), r.getRow(), r);
 							break;
 						
 						case 1: case 6:
 							//knight
-							board[column][row].putPiece(new Knight(column, row));
+							Knight n = new Knight(column, row);
+							addPiecePlay(n.getColumn(), n.getRow(), n);
 							break;
 							
 						case 2: case 5:
 							//bishop
-							board[column][row].putPiece(new Bishop(column, row));
+							Bishop b = new Bishop(column, row);
+							addPiecePlay(b.getColumn(), b.getRow(), b);
 							break;
 						
 						case 3:
 							//YASSS QUEEN
-							board[column][row].putPiece(new Queen(column, row));
+							Queen q = new Queen(column, row);
+							addPiecePlay(q.getColumn(), q.getRow(), q);
 							break;
 							
 						case 4:
 							//THE KING
-							board[column][row].putPiece(new King(column, row));
+							King k = new King(column, row);
+							addPiecePlay(k.getColumn(), k.getRow(), k);
 							break;
 						}	
 					}
@@ -77,7 +95,6 @@ public class Board {
 	
 	public Square getTileAt(String s) {
 		
-		System.out.println(s.charAt(0) + " " + s.charAt(1));
 		int row = s.charAt(0) - 'a' + 1;
 		int col = Character.getNumericValue(s.charAt(1));
 		
@@ -85,12 +102,75 @@ public class Board {
 		
 	}
 	
-	/*public Piece getPieceAt(String s) {
+	public void addPiecePlay(int c, int r, Piece p) {
 		
-		Square sq = getTileAt(s);
-		if(sq.filled)
-			return sq.p;
+		board[c][r].putPiece(p);
 		
-		return null;
-	}*/
+		if(p.getColor() == 'w') {
+			
+			if(p instanceof King)
+				white_king = p;
+			
+			else
+				white_pieces.add(p);
+			
+		}
+			
+		else if(p.getColor() == 'b') {
+			
+			if(p instanceof King)
+				black_king = p;
+			
+			else
+				black_pieces.add(p);
+			
+		}
+		
+	}
+	
+	public Square getTileAt(int r, int c) {
+		
+		return board[r][c];
+		
+	}
+	
+	public void movePiece(Square oldspot, Square newspot) {
+		
+		Piece piece = oldspot.removePiece();
+		
+		if(newspot.filled) {
+			
+			Piece captured = newspot.removePiece();
+			
+			if(captured.getColor() == 'w')
+				white_pieces.remove(captured);
+			
+			else
+				black_pieces.remove(captured);
+		}
+		
+		newspot.putPiece(piece);
+		
+	}
+	
+	public static <T> List<T> filter(List<T> list, Predicate<T> p){
+		
+		List<T> result = new ArrayList<T>();
+		
+		for(T t: list) {
+			
+			if(p.test(t))
+				result.add(t);
+		}
+		
+		return result;
+	}
+	
+
+	public List<Piece> threatens_spot(List<Piece> list, int c, int r) {
+		// TODO Auto-generated method stub
+		return filter(list, p -> p.threatens(c, r, this));
+	}
+	
+	
 }
