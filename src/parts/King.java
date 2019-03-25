@@ -79,7 +79,6 @@ public class King implements Piece {
 	public char getColor() {
 		return color;
 	}
-	
 
 	public int getRow() {
 		// TODO Auto-generated method stub
@@ -96,8 +95,17 @@ public class King implements Piece {
 	}
 
 	@Override
-	public Square[] getAllMoves() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Square> getAllMoves(Board b) {
+		ArrayList<Square> ret = new ArrayList<Square>();
+		
+		for(int c = column - 1; c < column + 2; c++) {
+			for(int r = row - 1; r < row + 2; r++) {
+				if(b.onBoard(c, r))
+					if(c != column || r != row)
+						ret.add(b.board[c][r]);
+			}
+		}
+		
+		return ret;
 	}
 }

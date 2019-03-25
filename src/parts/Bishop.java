@@ -1,5 +1,7 @@
 package parts;
 
+import java.util.ArrayList;
+
 public class Bishop implements Piece {
 
 	private int column, row;
@@ -109,7 +111,7 @@ public class Bishop implements Piece {
 	}
 
 	@Override
-	public Square[] getAllMoves() {
+	public ArrayList<Square> getAllMoves(Board b) {
 		// TODO Auto-generated method stub
 		return null;
 	}

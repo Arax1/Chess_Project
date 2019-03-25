@@ -1,5 +1,7 @@
 package parts;
 
+import java.util.ArrayList;
+
 public class Knight implements Piece {
 	
 	private int column, row;
@@ -105,8 +107,36 @@ public class Knight implements Piece {
 	}
 
 	@Override
-	public Square[] getAllMoves() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Square> getAllMoves(Board b) {
+		ArrayList<Square> ret = new ArrayList<Square>();
+		
+		for(int c = column - 1; c <= column + 1; c += 2) {
+			for(int r = row - 2; r <= row + 2; r += 4) {
+				if(b.onBoard(c, r))
+					ret.add(b.board[c][r]);
+			}
+		}
+		
+		for(int c = column - 2; c <= column + 2; c += 4) {
+			for(int r = row - 1; r <= row + 1; r += 2) {
+				if(b.onBoard(c, r))
+					ret.add(b.board[c][r]);
+			}
+		}
+		
+		return ret;
 	}
+	
+	/*public static void main(String[] args) {
+		Board b = new Board();
+		Piece p = b.board[1][0].p;
+		
+
+		p.moveTo(2, 2, b);
+		b.movePiece(1, 0, 2, 2);
+		
+		System.out.println(b);
+		for(Square s: p.getAllMoves(b))
+			System.out.println(s);
+	}*/
 }

@@ -1,7 +1,6 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import parts.Board;
@@ -20,7 +19,7 @@ public class Chess {
 		Board board = new Board();
 		Scanner scan = new Scanner(System.in);
 		String player;
-		char pc;
+		char pc, oc; // 'player color' and 'other color'
 		Piece king;
 
 		String str;
@@ -30,6 +29,7 @@ public class Chess {
 			board.printBoard();
 			
 			pc = turns % 2 == 0 ? 'w' : 'b';
+			oc = turns % 2 == 1 ? 'w' : 'b';
 			player = turns % 2 == 0 ? "White" : "Black";
 			king = (pc == 'w')? board.white_king: board.black_king;
 			
@@ -60,14 +60,18 @@ public class Chess {
 						System.out.println("Invalid Move");
 					
 					System.out.print("\n");
-					
-					List<Piece> list = (king.getColor() == 'w') ? board.black_pieces : board.white_pieces;
-					List<Piece> checks = board.threatens_spot(list, king.getColumn(), king.getRow());
 
-					if(!checks.isEmpty()) {
+					if(board.inCheck(oc)) {
+						
+						System.out.println("In check! Will check for checkmate.");
 						
 						//check for checkmate on OPPOSING king
-						checkmate = resolve_check(board, (King)((pc == 'b')? board.white_king : board.black_king));
+						checkmate = resolve_check(board, (pc == 'b')? board.white_king : board.black_king);
+					
+						if(checkmate) {
+							System.out.println("Checkmate!");
+							break;
+						}
 					}
 					
 			}
@@ -93,10 +97,16 @@ public class Chess {
 		//basically, just brute force check every possible location
 		Board newboard = b;
 		ArrayList<Piece> enemies = (k.getColor() == 'w') ? newboard.black_pieces : newboard.white_pieces;
+		
 		Piece temp = null;
+		Square old = null;
+		boolean foundmove = false;
 		
 		for(Piece p: enemies) {
-			for(Square s: p.getAllMoves()) {
+			//save the piece's original location
+			old = newboard.board[p.getColumn()][p.getRow()];
+			
+			for(Square s: p.getAllMoves(newboard)) {
 				
 				//if filled, save the piece for later
 				if(b.getTileAt(s).filled) {
@@ -104,11 +114,26 @@ public class Chess {
 				}
 				
 				//test the move
+				newboard.movePiece(p.getColumn(), p.getRow(), s.column, s.row);
 				
+				if(!newboard.inCheck(k.getColor())) {
+					//there is a move that results in leaving check - this isn't checkmate
+					foundmove = true;
+				}
+				
+				b.movePiece(s, old);
+				if(temp != null)
+					b.addPiecePlay(s.column, s.row, temp);
+				temp = null;
+				
+				if(foundmove) {
+					System.out.println("Can move " + p + " to + " + s);
+					return false;
+				}
 			}
 		}
 		
-		return false;
+		return true;
 	}
 	
 }

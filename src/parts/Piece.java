@@ -1,5 +1,6 @@
 package parts;
 
+import java.util.ArrayList;
 
 public interface Piece {
 	
@@ -13,6 +14,6 @@ public interface Piece {
 	
 	public int getColumn();
 	
-	public Square[] getAllMoves();
+	public ArrayList<Square> getAllMoves(Board board);
 	
 }

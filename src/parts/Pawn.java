@@ -1,5 +1,7 @@
 package parts;
 
+import java.util.ArrayList;
+
 public class Pawn implements Piece {
 	private int column, row;
 	private char color;
@@ -141,7 +143,7 @@ public class Pawn implements Piece {
 	}
 
 	@Override
-	public Square[] getAllMoves() {
+	public ArrayList<Square> getAllMoves(Board b) {
 		// TODO Auto-generated method stub
 		return null;
 	}

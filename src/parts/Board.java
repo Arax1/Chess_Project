@@ -11,8 +11,8 @@ public class Board {
 	public ArrayList<Piece> white_pieces;
 	
 	public Piece en_passant = null;
-	public Piece black_king;
-	public Piece white_king;
+	public King black_king;
+	public King white_king;
 	
 	public Board() {
 		
@@ -100,7 +100,7 @@ public class Board {
 		if(p.getColor() == 'w') {
 			
 			if(p instanceof King)
-				white_king = p;
+				white_king = (King)p;
 			
 			else
 				white_pieces.add(p);
@@ -110,7 +110,7 @@ public class Board {
 		else if(p.getColor() == 'b') {
 			
 			if(p instanceof King)
-				black_king = p;
+				black_king = (King)p;
 			
 			else
 				black_pieces.add(p);
@@ -192,5 +192,49 @@ public class Board {
 		return filter(list, p -> p.threatens(c, r, this));
 	}
 	
+	public boolean onBoard(int c, int r) {
+		if(c < 0 || c > 7 || r < 0 || r > 7)
+			return false;
+		return true;
+	}
 	
+	//checks if a color is in check (more precisely, if that king is being threatened
+	public boolean inCheck(char c) {
+		if(c == 'w') {
+			for(Piece p: black_pieces)
+				if(p.threatens(white_king.getColumn(), white_king.getRow(), this))
+					return true;
+		}
+		
+		else if(c == 'b') {
+			for(Piece p: white_pieces)
+				if(p.threatens(black_king.getColumn(), black_king.getRow(), this))
+					return true;
+		}
+		
+		return false;
+	}
+
+	//same thing as printBoard, just returning the string instead of printing
+	public String toString() {
+		String ret = "";
+		
+		for(int row = board[0].length; row > 0; row--) {
+			
+			for(int col = 0; col < board.length; col++)
+				ret += board[col][row-1] + " ";
+			
+			ret += row + "\n";
+		}
+		
+		for(int col = 0; col < board.length; col++) {
+			if(col != 0)
+				ret += " ";
+			
+			ret += " " + (char)('a'+col);
+			
+		}
+		
+		return ret;
+	}
 }
