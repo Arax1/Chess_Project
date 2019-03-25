@@ -12,4 +12,8 @@ public interface Piece {
 	
 	public char getColor();
 	
+	public int getRow();
+	
+	public int getColumn();
+	
 }
