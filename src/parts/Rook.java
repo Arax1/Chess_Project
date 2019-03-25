@@ -2,7 +2,7 @@ package parts;
 
 public class Rook implements Piece {
 
-	public int column, row;
+	private int column, row;
 	private char color;
 	
 	public Rook(int c, int r) {
@@ -74,6 +74,18 @@ public class Rook implements Piece {
 
 	public char getColor() {
 		return color;
+	}
+	
+	@Override
+	public int getRow() {
+		// TODO Auto-generated method stub
+		return row;
+	}
+
+	@Override
+	public int getColumn() {
+		// TODO Auto-generated method stub
+		return column;
 	}
 	
 	public String toString() {

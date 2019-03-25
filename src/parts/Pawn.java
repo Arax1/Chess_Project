@@ -1,7 +1,7 @@
 package parts;
 
 public class Pawn implements Piece {
-	public int column, row;
+	private int column, row;
 	private char color;
 	
 	public boolean hasmoved = false;
@@ -47,6 +47,7 @@ public class Pawn implements Piece {
 	public char getColor() {
 		return color;
 	}
+	
 	
 	public String toString() {
 		return getColor() + "P";
@@ -125,6 +126,18 @@ public class Pawn implements Piece {
 		}
 			
 		return false;
+	}
+
+	@Override
+	public int getRow() {
+		// TODO Auto-generated method stub
+		return row;
+	}
+
+	@Override
+	public int getColumn() {
+		// TODO Auto-generated method stub
+		return column;
 	}
 
 	/*public static void main(String[] args) {

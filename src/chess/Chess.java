@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.List;
 import java.util.Scanner;
 
 import parts.*;
@@ -10,12 +11,14 @@ public class Chess {
 	public static void main(String args[]){
 		
 		int turns = 0;
+		boolean checkmate = false;
 		
 		Board board = new Board();
-		
 		Scanner scan = new Scanner(System.in);
-		String player = "White";
-		char pc = 'w';
+		String player;
+		char pc;
+		Piece king;
+
 		String str;
 		
 		while (true) {
@@ -24,11 +27,12 @@ public class Chess {
 			
 			pc = turns % 2 == 0 ? 'w' : 'b';
 			player = turns % 2 == 0 ? "White" : "Black";
+			king = (pc == 'w')? board.white_king: board.black_king;
 			
 			System.out.print(player + "'s move: ");
 			str = scan.nextLine();
 			
-			if(!str.equals("resign")) {
+			if(!str.equals("resign") || !checkmate) {
 				
 					String[] arr = str.split(" ");
 					Square s1 = board.getTileAt(arr[0]);
@@ -53,6 +57,14 @@ public class Chess {
 					
 					System.out.print("\n");
 					
+					List<Piece> list = (king.getColor() == 'w') ? board.black_pieces : board.white_pieces;
+					List<Piece> checks = board.threatens_spot(list, king.getColumn(), king.getRow());
+
+					if(!checks.isEmpty()) {
+						
+						checkmate = resolve_check();
+					}
+					
 			}
 			
 			else {
@@ -68,6 +80,11 @@ public class Chess {
 		turns++;
 		System.out.println(player + " wins!");
 		
+	}
+	
+	// where you determine if there's checkmate or not;
+	public static boolean resolve_check() {
+		return false;
 	}
 	
 }

@@ -2,7 +2,7 @@ package parts;
 
 public class Knight implements Piece {
 	
-	public int column, row;
+	private int column, row;
 	private char color;
 	
 	public Knight(int c, int r) {
@@ -87,6 +87,17 @@ public class Knight implements Piece {
 	
 	public char getColor() {
 		return color;
+	}
+	
+
+	public int getRow() {
+		// TODO Auto-generated method stub
+		return row;
+	}
+
+	public int getColumn() {
+		// TODO Auto-generated method stub
+		return column;
 	}
 	
 	public String toString() {

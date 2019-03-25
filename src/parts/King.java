@@ -4,7 +4,7 @@ import java.util.*;
 
 public class King implements Piece {
 
-	public int column, row;
+	private int column, row;
 	private char color;
 	
 	public King(int c, int r) {
@@ -62,7 +62,7 @@ public class King implements Piece {
 		else {
 			
 			List<Piece> list = (this.getColor() == 'w') ? b.black_pieces : b.white_pieces;
-			List<Piece> threatens = b.threatens_king(list, c, r);
+			List<Piece> threatens = b.threatens_spot(list, c, r);
 			
 			if(!(threatens.isEmpty())) {
 				return false;
@@ -78,6 +78,17 @@ public class King implements Piece {
 
 	public char getColor() {
 		return color;
+	}
+	
+
+	public int getRow() {
+		// TODO Auto-generated method stub
+		return row;
+	}
+
+	public int getColumn() {
+		// TODO Auto-generated method stub
+		return column;
 	}
 	
 	public String toString() {
