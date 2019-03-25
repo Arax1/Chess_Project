@@ -90,8 +90,17 @@ public class Chess {
 		System.out.println(player + " wins!");
 		
 	}
+
+	
 	
 	// where you determine if there's checkmate or not;
+	/** For quick testing of checkmate, use the following move order:
+	 * e2 e4
+	 * f7 f6
+	 * f1 e2
+	 * g7 g5
+	 * e2 h5
+	 */
 	public static boolean resolve_check(Board b, King k) {
 		
 		//basically, just brute force check every possible location
