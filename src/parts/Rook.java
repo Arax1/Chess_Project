@@ -15,7 +15,6 @@ public class Rook implements Piece {
 		
 		color = (r == 7) ? 'b' : 'w';
 	}
-	
 	public Rook(int c, int r, char co) {
 		column = c;
 		row = r;
@@ -80,19 +79,18 @@ public class Rook implements Piece {
 		column = c;
 		row = r;
 		b.en_passant = null;
+		hasmoved = true;
 		return true;
 	}
 
 	public char getColor() {
 		return color;
 	}
-	
 	@Override
 	public int getRow() {
 		// TODO Auto-generated method stub
 		return row;
 	}
-
 	@Override
 	public int getColumn() {
 		// TODO Auto-generated method stub

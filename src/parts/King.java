@@ -15,7 +15,6 @@ public class King implements Piece {
 		
 		color = (r == 7) ? 'b' : 'w';
 	}
-	
 	public King(int c, int r, char co) {
 		column = c;
 		row = r;
@@ -82,18 +81,17 @@ public class King implements Piece {
 		column = c;
 		row = r;
 		b.en_passant = null;
+		hasmoved = true;
 		return true;
 	}
 
 	public char getColor() {
 		return color;
 	}
-
 	public int getRow() {
 		// TODO Auto-generated method stub
 		return row;
 	}
-
 	public int getColumn() {
 		// TODO Auto-generated method stub
 		return column;

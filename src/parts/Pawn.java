@@ -46,10 +46,6 @@ public class Pawn implements Piece {
 	    return this.row == o.row && this.column == o.column;
 	}
 	
-	public char getColor() {
-		return color;
-	}
-	
 	
 	public String toString() {
 		return getColor() + "P";
@@ -135,11 +131,13 @@ public class Pawn implements Piece {
 		// TODO Auto-generated method stub
 		return row;
 	}
-
 	@Override
 	public int getColumn() {
 		// TODO Auto-generated method stub
 		return column;
+	}
+	public char getColor() {
+		return color;
 	}
 
 	@Override
