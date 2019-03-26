@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.*;
 
+import chess.Chess;
+
 public class Board {
 	
 	public Square[][] board;
@@ -72,28 +74,20 @@ public class Board {
 			}
 	}
 	
-	public void printBoard() {
+	public void blank() {
+		board = new Square[8][8];
+		black_pieces = new ArrayList<Piece>();
+		white_pieces = new ArrayList<Piece>();
 		
-		for(int row = board[0].length; row > 0; row--) {
-			
-			for(int col = 0; col < board.length; col++)
-				System.out.print(board[col][row-1] + " ");
-			
-			System.out.println(row);
-		}
-		
-		for(int col = 0; col < board.length; col++) {
-			if(col != 0)
-				System.out.print(" ");
-			
-			System.out.print(" " + (char)('a'+col));
-			
-		}
-		
-		System.out.println("\n");
+		en_passant = null;
+		black_king = null;
+		white_king = null;
 	}
 	
 	public void addPiecePlay(int c, int r, Piece p) {
+		
+		if(p == null)
+			return;
 		
 		board[c][r].putPiece(p);
 		
@@ -102,8 +96,7 @@ public class Board {
 			if(p instanceof King)
 				white_king = (King)p;
 			
-			else
-				white_pieces.add(p);
+			white_pieces.add(p);
 			
 		}
 			
@@ -112,8 +105,7 @@ public class Board {
 			if(p instanceof King)
 				black_king = (King)p;
 			
-			else
-				black_pieces.add(p);
+			black_pieces.add(p);
 			
 		}
 		
@@ -124,11 +116,9 @@ public class Board {
 		return board[c][r];
 		
 	}
-	
 	public Square getTileAt(Square s) {
 		return getTileAt(s.column, s.row);
 	}
-	
 	public Square getTileAt(String s) {
 		
 		int row = s.charAt(0) - 'a' + 1;
@@ -156,7 +146,6 @@ public class Board {
 		newspot.putPiece(piece);
 		
 	}
-	
 	public void movePiece(int oc, int or, int nc, int nr) {
 		Piece piece = board[oc][or].removePiece();
 		
@@ -185,8 +174,7 @@ public class Board {
 		}
 		
 		return result;
-	}
-		
+	}	
 	public List<Piece> threatens_spot(List<Piece> list, int c, int r) {
 		// TODO Auto-generated method stub
 		return filter(list, p -> p.threatens(c, r, this));
@@ -236,5 +224,8 @@ public class Board {
 		}
 		
 		return ret;
+	}
+	public void printBoard() {
+		System.out.println(toString() + "\n");
 	}
 }

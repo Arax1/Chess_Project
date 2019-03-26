@@ -3,9 +3,14 @@ package chess;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import parts.Bishop;
 import parts.Board;
 import parts.King;
+import parts.Knight;
+import parts.Pawn;
 import parts.Piece;
+import parts.Queen;
+import parts.Rook;
 import parts.Square;
 
 
@@ -95,23 +100,34 @@ public class Chess {
 	
 	// where you determine if there's checkmate or not;
 	/** For quick testing of checkmate, use the following move order:
-	 * e2 e4
-	 * f7 f6
-	 * f1 e2
-	 * g7 g5
-	 * e2 h5
+	  e2 e4
+	  f7 f6
+	  f1 e2
+	  g7 g5
+	  e2 h5
 	 */
 	public static boolean resolve_check(Board b, King k) {
 		
 		//basically, just brute force check every possible location
-		Board newboard = b;
-		ArrayList<Piece> enemies = (k.getColor() == 'w') ? newboard.black_pieces : newboard.white_pieces;
+		Board newboard = new Board();
+		newboard.blank();
+		
+		//throws a concurrent modification exception
+		//ArrayList<Piece> enemies = (k.getColor() == 'w') ? b.black_pieces : b.white_pieces;
+		
+		ArrayList<Piece> enemies = new ArrayList<Piece>();
+		
+		for(Piece p: ((k.getColor() == 'w') ? newboard.white_pieces : newboard.black_pieces)) {
+			enemies.add(copy(p));
+		}
 		
 		Piece temp = null;
 		Square old = null;
 		boolean foundmove = false;
 		
 		for(Piece p: enemies) {
+			//System.out.println("Checking " + p + " at [" + p.getColumn() + "," + p.getRow() + "]");
+			
 			//save the piece's original location
 			old = newboard.board[p.getColumn()][p.getRow()];
 			
@@ -136,13 +152,41 @@ public class Chess {
 				temp = null;
 				
 				if(foundmove) {
-					System.out.println("Can move " + p + " to + " + s);
+					System.out.println("Can move " + p + " to [" + s.column + "," + s.row + "]");
 					return false;
 				}
 			}
 		}
 		
 		return true;
+	}
+	
+	public static Piece copy(Piece p) {
+		Piece ret;
+		
+		if(p instanceof Pawn) {
+			ret = new Pawn(p.getColumn(), p.getRow(), p.getColor());
+			((Pawn)ret).hasmoved = ((Pawn)p).hasmoved;
+			
+		} else if(p instanceof Bishop) {
+			ret = new Bishop(p.getColumn(), p.getRow(), p.getColor());
+		
+		} else if(p instanceof Knight) {
+			return new Knight(p.getColumn(), p.getRow(), p.getColor());
+		
+		} else if(p instanceof Rook) {
+			ret = new Rook(p.getColumn(), p.getRow(), p.getColor());
+			((Rook)ret).hasmoved = ((Rook)p).hasmoved;
+		
+		} else if(p instanceof Queen) {
+			ret = new Queen(p.getColumn(), p.getRow(), p.getColor());
+		
+		} else { //p is an instance of King, presumably
+			ret = new King(p.getColumn(), p.getRow(), p.getColor());
+			((King)ret).hasmoved = ((King)p).hasmoved;
+		}
+		
+		return ret;
 	}
 	
 }

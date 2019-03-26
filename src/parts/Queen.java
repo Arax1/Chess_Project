@@ -14,6 +14,13 @@ public class Queen implements Piece {
 		color = (r == 7) ? 'b' : 'w';
 	}
 	
+	public Queen(int c, int r, char co) {
+		column = c;
+		row = r;
+		
+		color = co;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -146,16 +153,70 @@ public class Queen implements Piece {
 		
 		ArrayList<Square> moves = new ArrayList<Square>();
 		
-		for(int col = 0; col < 8; col++) {
+		//up
+		for(int r = row + 1; r < 8; r++) {
+			moves.add(new Square(column, r));
 			
-			for(int ro = 0; ro < 8; ro++){
-				
-				if(threatens(col, ro, board))
-					moves.add(board.board[col][ro]);
-					
-			}
+			if(board.getTileAt(column, r).filled)
+				break;
 		}
+		
+		//up-right
+		for(int delta = 1; board.onBoard(column + delta, row + delta); delta++) {
+			moves.add(new Square(column + delta, row + delta));
 			
+			if(board.getTileAt(column + delta, row + delta).filled)
+				break;
+		}
+		
+		//right
+		for(int c = column + 1; c < 8; c++) {
+			moves.add(new Square(c, row));
+			
+			if(board.getTileAt(c, row).filled)
+				break;
+		}
+		
+		//down-right
+		for(int delta = 1; board.onBoard(column + delta, row - delta); delta++) {
+			moves.add(new Square(column + delta, row - delta));
+			
+			if(board.getTileAt(column + delta, row - delta).filled)
+				break;
+		}
+		
+		//down
+		for(int r = row - 1; r >= 0; r--) {
+			moves.add(new Square(column, r));
+			
+			if(board.getTileAt(column, r).filled)
+				break;
+		}
+		
+		//down-left
+		for(int delta = 1; board.onBoard(column - delta, row - delta); delta++) {
+			moves.add(new Square(column - delta, row - delta));
+			
+			if(board.getTileAt(column - delta, row - delta).filled)
+				break;
+		}
+		
+		//left
+		for(int c = column - 1; c >= 0; c--) {
+			moves.add(new Square(c, row));
+			
+			if(board.getTileAt(c, row).filled)
+				break;
+		}
+		
+		//up-left
+		for(int delta = 1; board.onBoard(column - delta, row + delta); delta++) {
+			moves.add(new Square(column - delta, row + delta));
+			
+			if(board.getTileAt(column - delta, row + delta).filled)
+				break;
+		}
+		
 		return moves;
 	}
 }

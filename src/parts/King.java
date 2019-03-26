@@ -7,11 +7,20 @@ public class King implements Piece {
 	private int column, row;
 	private char color;
 	
+	public boolean hasmoved = false;
+	
 	public King(int c, int r) {
 		column = c;
 		row = r;
 		
 		color = (r == 7) ? 'b' : 'w';
+	}
+	
+	public King(int c, int r, char co) {
+		column = c;
+		row = r;
+		
+		color = co;
 	}
 	
 	public boolean equals(Object obj) {

@@ -14,6 +14,13 @@ public class Bishop implements Piece {
 		color = (r == 7) ? 'b' : 'w';
 	}
 	
+	public Bishop(int c, int r, char co) {
+		column = c;
+		row = r;
+		
+		color = co;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		

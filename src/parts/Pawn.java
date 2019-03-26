@@ -74,8 +74,8 @@ public class Pawn implements Piece {
 	@Override
 	public boolean moveTo(int newc, int newr, Board b) {
 		
-		System.out.println("Current Row and Collumn: " + row + " " + column);
-		System.out.println("Destination Row and Collumn: " + newr + " " + newc);
+		//System.out.println("Current Row and Collumn: " + row + " " + column);
+		//System.out.println("Destination Row and Collumn: " + newr + " " + newc);
 		
 		int direction = (color == 'w') ? 1 : -1;
 		int hop = (hasmoved) ? 0 : direction;

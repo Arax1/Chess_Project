@@ -34,7 +34,7 @@ public class Square {
 	}
 	
 	public String toString() {
-		if(!filled) {
+		if(!filled || p == null) {
 			if((row + column) % 2 == 0)
 				return "##";
 			else
