@@ -143,9 +143,29 @@ public class Pawn implements Piece {
 	}
 
 	@Override
-	public ArrayList<Square> getAllMoves(Board b) {
+	public ArrayList<Square> getAllMoves(Board board) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<Square> moves = new ArrayList<Square>();
+		boolean old_moved = hasmoved;
+		int old_row = row;
+		int old_col = column;
+		Piece old_pas = board.en_passant;
+		
+		for(int col = 0; col < 8; col++) {
+			
+			for(int ro = 0; ro < 8; ro++){
+				
+				if(threatens(col, ro, board) || moveTo(col, ro, board))
+					moves.add(board.board[col][ro]);
+					hasmoved = old_moved;
+					row = old_row;
+					column = old_col;
+					board.en_passant = old_pas;
+			}
+		}
+			
+		return moves;
 	}
 
 	

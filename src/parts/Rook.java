@@ -1,5 +1,7 @@
 package parts;
 
+import java.util.ArrayList;
+
 public class Rook implements Piece {
 
 	private int column, row;
@@ -92,9 +94,24 @@ public class Rook implements Piece {
 		return getColor() + "R";
 	}
 
+
 	@Override
-	public Square[] getAllMoves() {
+	public ArrayList<Square> getAllMoves(Board board) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<Square> moves = new ArrayList<Square>();
+		
+		for(int col = 0; col < 8; col++) {
+			
+			for(int ro = 0; ro < 8; ro++){
+				
+				if(threatens(col, ro, board))
+					moves.add(board.board[col][ro]);
+					
+			}
+		}
+			
+		
+		return moves;
 	}
 }

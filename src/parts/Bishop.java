@@ -111,8 +111,22 @@ public class Bishop implements Piece {
 	}
 
 	@Override
-	public ArrayList<Square> getAllMoves(Board b) {
+	public ArrayList<Square> getAllMoves(Board board) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<Square> moves = new ArrayList<Square>();
+		
+		for(int col = 0; col < 8; col++) {
+			
+			for(int ro = 0; ro < 8; ro++){
+				
+				if(threatens(col, ro, board))
+					moves.add(board.board[col][ro]);
+					
+			}
+		}
+			
+		
+		return moves;
 	}
 }
