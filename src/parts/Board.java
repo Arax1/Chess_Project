@@ -125,7 +125,7 @@ public class Board {
 	}
 
 	//move a piece from one spot to another
-	public void movePiece(Square oldspot, Square newspot) {
+	public void movePiece(Square oldspot, Square newspot, String promote) {
 
 		Piece piece = oldspot.removePiece();
 
@@ -139,25 +139,73 @@ public class Board {
 			else
 				black_pieces.remove(captured);
 		}
-
-		newspot.putPiece(piece);
-
+		
+		int prom = (piece.getColor() == 'w') ? 7 : 0;
+		
+		if(piece instanceof Pawn && newspot.row == prom) {
+			
+			Promotion(promote, newspot.column, newspot.row);
+		}
+		
+		else {
+			
+			newspot.putPiece(piece);
+		}
+			
 	}
+	
+	public void Promotion(String promote, int column, int row) {
+		
+		switch(promote.toLowerCase()) {
+
+			case "rook":
+				//rook
+				Rook rook = new Rook(column, row);
+				addPiecePlay(rook.getColumn(), rook.getRow(), rook);
+				break;
+	
+			case "knight":
+				//knight
+				Knight n = new Knight(column, row);
+				addPiecePlay(n.getColumn(), n.getRow(), n);
+				break;
+	
+			case "bishop":
+				//bishop
+				Bishop b = new Bishop(column, row);
+				addPiecePlay(b.getColumn(), b.getRow(), b);
+				break;
+	
+			default:
+				//YASSS QUEEN
+				Queen q = new Queen(column, row);
+				addPiecePlay(q.getColumn(), q.getRow(), q);
+				break;
+	
+		}
+		
+	}
+	
 	public void movePiece(int oc, int or, int nc, int nr) {
 		Piece piece = board[oc][or].removePiece();
-
-		if(board[nc][nr].filled) {
-
-			Piece captured = board[nc][nr].removePiece();
-
-			if(captured.getColor() == 'w')
-				white_pieces.remove(captured);
-
-			else
-				black_pieces.remove(captured);
+		System.out.println("Moving Piece: " + piece + " to: " + board[nc][nr]);
+		
+		if(piece != null) {
+			
+			if(board[nc][nr].filled) {
+	
+				Piece captured = board[nc][nr].removePiece();
+	
+				if(captured.getColor() == 'w')
+					white_pieces.remove(captured);
+	
+				else
+					black_pieces.remove(captured);
+			}
+	
+			board[nc][nr].putPiece(piece);
+		
 		}
-
-		board[nc][nr].putPiece(piece);
 	}
 
 	// where you determine if there's checkmate or not;
@@ -165,22 +213,34 @@ public class Board {
 
 			ArrayList<Square> king_spots = k.getAllMoves(this);
 
-			List<Piece> ally = (k.getColor() == 'w') ? white_pieces : black_pieces;
-			List<Piece> enemy = (k.getColor() == 'w') ? black_pieces : white_pieces;
-
-			for(Square s: king_spots) {
-
-				List<Piece> spot_checks = threatens_spot(enemy, s.column, s.row);
-
-				if(spot_checks.isEmpty())
-					return false;
-			}
+			if(king_spots.size() > 0)
+				return false;
 
 			//with double check, the only possible way to escape is for the king move to a safe spot.
 			if(checks.size() < 2) {
-
+				
+				List<Piece> ally = new ArrayList<Piece>();
+				List<Piece> enemy = new ArrayList<Piece>();
+				
+				if(k.getColor() == 'w') {
+					
+					ally = white_pieces;
+					ally.remove(white_king);
+					enemy = black_pieces;
+					enemy.remove(black_king);
+				}
+				
+				else {
+					
+					ally = black_pieces;
+					ally.remove(black_king);
+					enemy = white_pieces;
+					enemy.remove(white_king);
+				}
+				
+				Piece threat = checks.get(0);
 				List<Piece> eliminate_check = threatens_spot(ally, checks.get(0).getColumn(), checks.get(0).getRow());
-				List<Piece> blocks_check = filter(ally, p -> p.canBlockPiece(checks.get(0), (Piece)k, this));
+				List<Piece> blocks_check = filter(ally, p -> p.canBlockPiece(threat, (Piece)k, this));
 
 				if(!eliminate_check.isEmpty() || !blocks_check.isEmpty())
 					return false;

@@ -52,6 +52,7 @@ public class King implements Piece {
 		return false;
 
 	}
+	
 	public boolean moveTo(int c, int r, Board b) {
 
 		if(!b.onBoard(c,r))
@@ -84,7 +85,10 @@ public class King implements Piece {
 			 */
 			
 			//1 - New space threatened? If so, false.
-			if(b.threatened(c, r, color))
+			List<Piece> enemy = (getColor() == 'w') ? b.black_pieces : b.white_pieces;
+			List<Piece> threats = b.threatens_spot(enemy, c, r);
+			
+			if(!threats.isEmpty())
 				return false;
 			
 			//2 - New space in distance 1? If so, true.
@@ -137,6 +141,7 @@ public class King implements Piece {
 		
 		return false;
 	}
+	
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = row;
@@ -149,7 +154,7 @@ public class King implements Piece {
 
 			if(moveTo(s.column, s.row, b)) {
 
-				b.movePiece(row, column, s.column, s.row);
+				b.movePiece(column, row, s.column, s.row);
 
 				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
 					return true;
@@ -157,8 +162,7 @@ public class King implements Piece {
 
 				else {
 
-					row = o_row;
-					column = o_col;
+					b.movePiece(s.column, s.row, o_col, o_row);
 					b.en_passant = o_p;
 				}
 			}

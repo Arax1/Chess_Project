@@ -16,6 +16,7 @@ public class Chess {
 
 		int turns = 0;
 		boolean checkmate = false;
+		boolean draw = false;
 
 		Board board = new Board();
 		Scanner scan = new Scanner(System.in);
@@ -44,7 +45,18 @@ public class Chess {
 					String[] arr = str.split(" ");
 					Square s1 = board.getTileAt(arr[0]);
 					Square s2 = board.getTileAt(arr[1]);
-
+					String third = "";
+					
+					if(arr.length > 2)
+						third = arr[2];
+					
+					if(third.equals("draw?")) {
+						
+						draw = true;
+						break;
+						
+					}
+					
 					Piece piece = (s1.filled) ? s1.p : null;
 
 					int new_row = s2.row;
@@ -54,7 +66,7 @@ public class Chess {
 					if(piece != null && piece.getColor() == pc && piece.moveTo(new_col, new_row, board)) {
 
 						//System.out.println(s1 + " has moved to: " + s2);
-						board.movePiece(s1, s2);
+						board.movePiece(s1, s2, third);
 						turns++;
 
 					}
@@ -87,7 +99,8 @@ public class Chess {
 			}
 
 		}
-
+		
+		
 		scan.close();
 		turns++;
 		System.out.println(player + " wins!");

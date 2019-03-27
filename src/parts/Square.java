@@ -26,6 +26,7 @@ public class Square {
 		filled = true;
 		
 	}
+	
 	public Piece removePiece() {
 		Piece pout = p;
 		p = null;
