@@ -80,10 +80,12 @@ public class Rook implements Piece {
 		b.en_passant = null;
 		return true;
 	}
+	
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = row;
 		int o_col = column;
+		boolean old_moved = hasmoved;
 		Pawn o_p = b.en_passant;
 
 		ArrayList<Square> threat_spots = threat.getAllMoves(b);
@@ -92,21 +94,25 @@ public class Rook implements Piece {
 
 			if(moveTo(s.column, s.row, b)) {
 
-				b.movePiece(row, column, s.column, s.row);
+				b.movePiece(column, row, s.column, s.row);
 
 				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					b.movePiece(s.column, s.row, o_col, o_row);
+					b.en_passant = o_p;
+					hasmoved = old_moved;
 					return true;
 				}
 
 				else {
-
-					row = o_row;
-					column = o_col;
+					
+					b.movePiece(s.column, s.row, o_col, o_row);
 					b.en_passant = o_p;
+					hasmoved = old_moved;
 				}
 			}
 
 		}
+		
 
 		return false;
 	}

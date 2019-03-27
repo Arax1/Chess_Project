@@ -90,6 +90,7 @@ public class Queen implements Piece {
 		b.en_passant = null;
 		return true;
 	}
+	
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = row;
@@ -102,21 +103,23 @@ public class Queen implements Piece {
 
 			if(moveTo(s.column, s.row, b)) {
 
-				b.movePiece(row, column, s.column, s.row);
+				b.movePiece(column, row, s.column, s.row);
 
 				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					b.movePiece(s.column, s.row, o_col, o_row);
+					b.en_passant = o_p;
 					return true;
 				}
 
 				else {
-
-					row = o_row;
-					column = o_col;
+					
+					b.movePiece(s.column, s.row, o_col, o_row);
 					b.en_passant = o_p;
 				}
 			}
 
 		}
+		
 
 		return false;
 	}
@@ -148,7 +151,7 @@ public class Queen implements Piece {
 		return column;
 	}
 
-	public String brak(int a, int b) {
+	public static String brak(int a, int b) {
 		return "[" + a + "," + b + "]";
 	}
 	
