@@ -21,6 +21,9 @@ public class Square {
 	public void putPiece(Piece in) {
 		
 		p = in;
+		p.setRow(row);
+		p.setColumn(column);
+		
 		filled = true;
 		
 	}
@@ -34,7 +37,7 @@ public class Square {
 	}
 	
 	public String toString() {
-		if(!filled || p == null) {
+		if(!filled) {
 			if((row + column) % 2 == 0)
 				return "##";
 			else
