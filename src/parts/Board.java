@@ -277,20 +277,17 @@ public class Board {
 		
 		return threatened(k.getColumn(), k.getRow(), c);
 	}
+	
 	public boolean threatened(int c, int r, char color) {
-		if(c == 'w') {
-			for(Piece p: black_pieces)
-				if(p.threatens(c, r, this))
-					return true;
-		}
 		
-		if(c == 'b') {
-			for(Piece p: white_pieces)
-				if(p.threatens(c, r, this))
-					return true;
-		}
+		List<Piece> enemy = (color == 'w') ? black_pieces : white_pieces;
+		List<Piece> threats = threatens_spot(enemy, c, r);
 		
-		return false;
+		if(!threats.isEmpty())
+			return false;
+		
+		return true;
+
 	}
 	
 	//to check if there's a piece at a given spot on the board

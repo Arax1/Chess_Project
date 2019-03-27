@@ -2,7 +2,7 @@ package parts;
 
 import java.util.*;
 
-public class King implements Piece {
+public class King extends Piece {
 
 	private int column, row;
 	private char color;

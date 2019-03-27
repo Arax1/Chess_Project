@@ -2,7 +2,7 @@ package parts;
 
 import java.util.ArrayList;
 
-public class Rook implements Piece {
+public class Rook extends Piece {
 
 	private int column, row;
 	private char color;
@@ -119,26 +119,6 @@ public class Rook implements Piece {
 
 	public String toString() {
 		return getColor() + "R";
-	}
-
-	@Override
-	public ArrayList<Square> getAllMoves(Board b) {
-		// TODO Auto-generated method stub
-		ArrayList<Square> moves = new ArrayList<Square>();
-		Pawn o_pas = b.en_passant;
-
-		for(int col = 0; col < 8; col++) {
-
-			for(int ro = 0; ro < 8; ro++) {
-
-				if(moveTo(col, ro, b)) {
-					b.en_passant = o_pas;
-					moves.add(b.board[col][ro]);
-				}
-			}
-		}
-
-		return moves;
 	}
 
 	public char getColor() {

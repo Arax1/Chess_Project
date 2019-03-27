@@ -2,7 +2,7 @@ package parts;
 
 import java.util.ArrayList;
 
-public class Knight implements Piece {
+public class Knight extends Piece {
 
 	private int column, row;
 	private char color;
