@@ -13,12 +13,6 @@ public class Bishop implements Piece {
 		
 		color = (r == 7) ? 'b' : 'w';
 	}
-	public Bishop(int c, int r, char co) {
-		column = c;
-		row = r;
-		
-		color = co;
-	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -62,7 +56,7 @@ public class Bishop implements Piece {
 				return false;
 			
 			else {
-				if(b.filled(cindex,rindex))
+				if(b.board[cindex][rindex].filled)
 					return false;
 				
 				rindex += r_mod;
@@ -84,27 +78,57 @@ public class Bishop implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.filled(c,r)) {
+		if(b.board[c][r].filled) {
 			char pcolor = b.board[c][r].p.getColor();
-			//System.out.println("Piece: " + b.board[c][r].p + " Color: " + pcolor );
+			// System.out.println("Piece: " + b.board[c][r].p + " Color: " + pcolor );
 			if(b.board[c][r].p.getColor() == color)
 				return false;
 		}
 			
-		
-		column = c;
-		row = r;
-		
+		b.en_passant = null;
 		return true;
+	}
+	
+	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
+		
+		int o_row = row;
+		int o_col = column;
+		Piece o_p = b.en_passant;
+		
+		ArrayList<Square> threat_spots = threat.getAllMoves(b);
+		
+		for(Square s: threat_spots) {
+			
+			if(moveTo(s.column, s.row, b)) {
+				
+				b.movePiece(row, column, s.column, s.row);
+				
+				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					return true;
+				}
+					
+				else {
+					
+					row = o_row;
+					column = o_col;
+					b.en_passant = o_p;
+				}
+			}
+				
+		}
+		
+		return false;
 	}
 
 	public char getColor() {
 		return color;
 	}
+	
 	public int getRow() {
 		// TODO Auto-generated method stub
 		return row;
 	}
+
 	public int getColumn() {
 		// TODO Auto-generated method stub
 		return column;
@@ -115,22 +139,34 @@ public class Bishop implements Piece {
 	}
 
 	@Override
-	public ArrayList<Square> getAllMoves(Board board) {
+	public ArrayList<Square> getAllMoves(Board b) {
 		// TODO Auto-generated method stub
-		
 		ArrayList<Square> moves = new ArrayList<Square>();
+		Piece o_pas = b.en_passant;
 		
 		for(int col = 0; col < 8; col++) {
 			
-			for(int ro = 0; ro < 8; ro++){
+			for(int ro = 0; ro < 8; ro++) {
 				
-				if(threatens(col, ro, board))
-					moves.add(board.board[col][ro]);
-					
+				if(moveTo(col, ro, b)) {
+					b.en_passant = o_pas;
+					moves.add(b.board[col][ro]);
+				}		
 			}
 		}
-			
 		
 		return moves;
+	}
+	
+	@Override
+	public void setRow(int r) {
+		// TODO Auto-generated method stub
+		row = r;
+	}
+
+	@Override
+	public void setColumn(int c) {
+		// TODO Auto-generated method stub
+		column = c;
 	}
 }
