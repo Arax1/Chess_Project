@@ -26,24 +26,24 @@ public class Chess {
 
 		Board board = new Board();
 		Scanner scan = new Scanner(System.in);
-		String player;
+		String player = "White";
 		char pc;
 		Piece king;
 
 		String str;
 
 		while (true) {
-
+			
+			if(checkmate) {
+				draw = false;
+				break;
+			}
+			
 			board.printBoard();
 
 			pc = turns % 2 == 0 ? 'w' : 'b';
 			player = turns % 2 == 0 ? "White" : "Black";
 			king = (pc == 'w')? board.black_king: board.white_king;
-
-			if(checkmate) {
-				draw = false;
-				break;
-			}
 				
 
 			System.out.print(player + "'s move: ");
@@ -113,6 +113,9 @@ public class Chess {
 		
 		if(draw)
 			System.out.println("draw");
+		
+		else if(checkmate)
+			System.out.println(player + " wins!");
 		
 		else
 			System.out.println(player + " wins!");
