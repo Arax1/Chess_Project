@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.*;
 
-import chess.Chess;
-
 public class Board {
 	
 	public Square[][] board;
@@ -13,8 +11,8 @@ public class Board {
 	public ArrayList<Piece> white_pieces;
 	
 	public Piece en_passant = null;
-	public King black_king;
-	public King white_king;
+	public Piece black_king;
+	public Piece white_king;
 	
 	public Board() {
 		
@@ -74,38 +72,48 @@ public class Board {
 			}
 	}
 	
-	public void blank() {
-		board = new Square[8][8];
-		black_pieces = new ArrayList<Piece>();
-		white_pieces = new ArrayList<Piece>();
+	public void printBoard() {
 		
-		en_passant = null;
-		black_king = null;
-		white_king = null;
+		for(int row = board[0].length; row > 0; row--) {
+			
+			for(int col = 0; col < board.length; col++)
+				System.out.print(board[col][row-1] + " ");
+			
+			System.out.println(row);
+		}
+		
+		for(int col = 0; col < board.length; col++) {
+			if(col != 0)
+				System.out.print(" ");
+			
+			System.out.print(" " + (char)('a'+col));
+			
+		}
+		
+		System.out.println("\n");
 	}
 	
 	public void addPiecePlay(int c, int r, Piece p) {
-		
-		if(p == null)
-			return;
 		
 		board[c][r].putPiece(p);
 		
 		if(p.getColor() == 'w') {
 			
 			if(p instanceof King)
-				white_king = (King)p;
+				white_king = p;
 			
-			white_pieces.add(p);
+			else
+				white_pieces.add(p);
 			
 		}
 			
 		else if(p.getColor() == 'b') {
 			
 			if(p instanceof King)
-				black_king = (King)p;
+				black_king = p;
 			
-			black_pieces.add(p);
+			else
+				black_pieces.add(p);
 			
 		}
 		
@@ -116,9 +124,11 @@ public class Board {
 		return board[c][r];
 		
 	}
+	
 	public Square getTileAt(Square s) {
 		return getTileAt(s.column, s.row);
 	}
+	
 	public Square getTileAt(String s) {
 		
 		int row = s.charAt(0) - 'a' + 1;
@@ -146,6 +156,7 @@ public class Board {
 		newspot.putPiece(piece);
 		
 	}
+	
 	public void movePiece(int oc, int or, int nc, int nr) {
 		Piece piece = board[oc][or].removePiece();
 		
@@ -174,67 +185,42 @@ public class Board {
 		}
 		
 		return result;
-	}	
+	}
+		
 	public List<Piece> threatens_spot(List<Piece> list, int c, int r) {
 		// TODO Auto-generated method stub
 		return filter(list, p -> p.threatens(c, r, this));
 	}
 	
-	//to check if a certain column and row are within the board's boundaries
-	public boolean onBoard(int c, int r) {
-		if(c < 0 || c > 7 || r < 0 || r > 7)
-			return false;
+	// where you determine if there's checkmate or not;
+	public boolean resolve_check(List<Piece> checks, King k) {
+		
+		ArrayList<Square> king_spots = k.getAllMoves(this);
+		
+		List<Piece> ally = (k.getColor() == 'w') ? white_pieces : black_pieces;
+		List<Piece> enemy = (k.getColor() == 'w') ? black_pieces : white_pieces;
+		
+		for(Square s: king_spots) {
+			
+			List<Piece> spot_checks = threatens_spot(enemy, s.column, s.row);
+			
+			if(spot_checks.isEmpty())
+				return false;
+		}
+		
+		//with double check, the only possible way to escape is for the king move to a safe spot.
+		if(checks.size() < 2) {
+			
+			List<Piece> eliminate_check = threatens_spot(ally, checks.get(0).getColumn(), checks.get(0).getRow());
+			List<Piece> blocks_check = filter(ally, p -> p.canBlockPiece(checks.get(0), (Piece)k, this));
+			
+			if(!eliminate_check.isEmpty() || !blocks_check.isEmpty())
+				return false;
+		}
+		
 		return true;
 	}
-
-	//to check if there's a piece at a given spot on the board
-	public boolean filled(int c, int r) {
-		return board[c][r].filled;
-	}
-	public boolean filled(Square s) {
-		return board[s.column][s.row].filled;
-	}
+			
 	
-	//checks if a color is in check (more precisely, if that king is being threatened
-	public boolean inCheck(char c) {
-		if(c == 'w') {
-			for(Piece p: black_pieces)
-				if(p.threatens(white_king.getColumn(), white_king.getRow(), this))
-					return true;
-		}
-		
-		else if(c == 'b') {
-			for(Piece p: white_pieces)
-				if(p.threatens(black_king.getColumn(), black_king.getRow(), this))
-					return true;
-		}
-		
-		return false;
-	}
-
-	//same thing as printBoard, just returning the string instead of printing
-	public String toString() {
-		String ret = "";
-		
-		for(int row = board[0].length; row > 0; row--) {
-			
-			for(int col = 0; col < board.length; col++)
-				ret += board[col][row-1] + " ";
-			
-			ret += row + "\n";
-		}
-		
-		for(int col = 0; col < board.length; col++) {
-			if(col != 0)
-				ret += " ";
-			
-			ret += " " + (char)('a'+col);
-			
-		}
-		
-		return ret;
-	}
-	public void printBoard() {
-		System.out.println(toString() + "\n");
-	}
+	
 }
