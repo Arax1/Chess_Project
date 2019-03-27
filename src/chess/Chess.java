@@ -94,7 +94,7 @@ public class Chess {
 
 	}
 	
-	public String brak(int a, int b) {
+	public static String brak(int a, int b) {
 		return "[" + a + "," + b + "]";
 	}
 
