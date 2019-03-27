@@ -13,6 +13,11 @@ public abstract class Piece {
 		return false;
 	}
 	public boolean moveTo(int c, int r, Board board) {
+		
+		int o_row = row;
+		int o_col = column;
+		Pawn o_p = board.en_passant;
+		
 		if(!threatens(c,r,board))
 			return false;
 		
@@ -22,7 +27,18 @@ public abstract class Piece {
 		if(board.filled(c,r))
 			if(board.colorAt(c,r) == color)
 				return false;
-
+		
+		Piece king = (getColor() == 'w') ? board.white_king : board.black_king;
+			
+		board.movePiece(column, row, c, r);
+		
+		if(!board.threatened(king.getColumn(), king.getRow(), king.getColor())) {
+			
+			board.movePiece(c, r, o_col, o_row);
+			board.en_passant = o_p;
+			return true;
+		} 
+		
 		board.en_passant = null;
 		return true;
 	}
