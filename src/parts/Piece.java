@@ -42,9 +42,15 @@ public abstract class Piece {
 				b.movePiece(column, row, s.column, s.row);
 
 				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
-					b.movePiece(s.column, s.row, o_col, o_row);
-					b.en_passant = o_p;
-					return true;
+					
+					if(!b.threatened(victim.getColumn(), victim.getRow(), victim.getColor())) {
+						
+						b.movePiece(s.column, s.row, o_col, o_row);
+						b.en_passant = o_p;
+						return true;
+					} 
+					
+					
 				}
 
 				else {
