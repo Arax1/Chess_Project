@@ -23,6 +23,8 @@ public abstract class Piece {
 			if(board.colorAt(c,r) == color)
 				return false;
 
+		
+		
 		board.en_passant = null;
 		return true;
 	}

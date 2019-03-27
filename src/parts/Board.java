@@ -215,6 +215,11 @@ public class Board {
 		return true;
 	}
 	
+	//just check if a move is possible, don't actually do it
+	public boolean transientmove(Piece p, Square s) {
+		
+	}
+	
 	public void Promotion(String promote, int column, int row) {
 		
 		switch(promote.toLowerCase()) {
@@ -287,7 +292,6 @@ public class Board {
 
 			return true;
 		}
-
 	
 	//methods to find what pieces threaten a certain spot
 	public static <T> List<T> filter(List<T> list, Predicate<T> p){
