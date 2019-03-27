@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import parts.Bishop;
@@ -24,7 +25,7 @@ public class Chess {
 		Board board = new Board();
 		Scanner scan = new Scanner(System.in);
 		String player;
-		char pc, oc; // 'player color' and 'other color'
+		char pc;
 		Piece king;
 
 		String str;
@@ -34,14 +35,16 @@ public class Chess {
 			board.printBoard();
 			
 			pc = turns % 2 == 0 ? 'w' : 'b';
-			oc = turns % 2 == 1 ? 'w' : 'b';
 			player = turns % 2 == 0 ? "White" : "Black";
-			king = (pc == 'w')? board.white_king: board.black_king;
+			king = (pc == 'w')? board.black_king: board.white_king;
+			
+			if(checkmate)
+				break;
 			
 			System.out.print(player + "'s move: ");
 			str = scan.nextLine();
 			
-			if(!str.equals("resign") || !checkmate) {
+			if(!str.equals("resign")) {
 				
 					String[] arr = str.split(" ");
 					Square s1 = board.getTileAt(arr[0]);
@@ -65,20 +68,15 @@ public class Chess {
 						System.out.println("Invalid Move");
 					
 					System.out.print("\n");
-
-					/** Note! If you can't move but aren't in check, you are in stalemate! **/
 					
-					if(board.inCheck(oc)) {
-						
-						System.out.println("In check! Will check for checkmate.");
+					List<Piece> list = (king.getColor() == 'w') ? board.black_pieces : board.white_pieces;
+					List<Piece> checks = board.threatens_spot(list, king.getColumn(), king.getRow());
+					System.out.println(checks.size());
+
+					if(!checks.isEmpty()) {
 						
 						//check for checkmate on OPPOSING king
-						checkmate = resolve_check(board, (pc == 'b')? board.white_king : board.black_king);
-					
-						if(checkmate) {
-							System.out.println("Checkmate!");
-							break;
-						}
+						checkmate = board.resolve_check(checks, (King) king);
 					}
 					
 			}
@@ -97,10 +95,8 @@ public class Chess {
 		System.out.println(player + " wins!");
 		
 	}
-
 	
 	
-	// where you determine if there's checkmate or not;
 	/** For quick testing of checkmate, use the following move order:
 	  e2 e4
 	  f7 f6
@@ -108,11 +104,13 @@ public class Chess {
 	  g7 g5
 	  e2 h5
 	 */
-	public static boolean resolve_check(Board b, King k) {
+	
+	
+	//this code has been deprecated
+	/**	public static boolean resolve_check(Board b, King k) {
 		
 		//basically, just brute force check every possible location
 		Board newboard = new Board();
-		newboard.blank();
 		
 		//throws a concurrent modification exception
 		//ArrayList<Piece> enemies = (k.getColor() == 'w') ? b.black_pieces : b.white_pieces;
@@ -190,5 +188,5 @@ public class Chess {
 		
 		return ret;
 	}
-	
+	 */
 }

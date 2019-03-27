@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.*;
 
-import chess.Chess;
-
 public class Board {
 	
 	public Square[][] board;
@@ -74,20 +72,7 @@ public class Board {
 			}
 	}
 	
-	public void blank() {
-		board = new Square[8][8];
-		black_pieces = new ArrayList<Piece>();
-		white_pieces = new ArrayList<Piece>();
-		
-		en_passant = null;
-		black_king = null;
-		white_king = null;
-	}
-	
 	public void addPiecePlay(int c, int r, Piece p) {
-		
-		if(p == null)
-			return;
 		
 		board[c][r].putPiece(p);
 		
@@ -96,7 +81,8 @@ public class Board {
 			if(p instanceof King)
 				white_king = (King)p;
 			
-			white_pieces.add(p);
+			else
+				white_pieces.add(p);
 			
 		}
 			
@@ -105,7 +91,8 @@ public class Board {
 			if(p instanceof King)
 				black_king = (King)p;
 			
-			black_pieces.add(p);
+			else
+				black_pieces.add(p);
 			
 		}
 		
@@ -174,25 +161,10 @@ public class Board {
 		}
 		
 		return result;
-	}	
+	}
 	public List<Piece> threatens_spot(List<Piece> list, int c, int r) {
 		// TODO Auto-generated method stub
 		return filter(list, p -> p.threatens(c, r, this));
-	}
-	
-	//to check if a certain column and row are within the board's boundaries
-	public boolean onBoard(int c, int r) {
-		if(c < 0 || c > 7 || r < 0 || r > 7)
-			return false;
-		return true;
-	}
-
-	//to check if there's a piece at a given spot on the board
-	public boolean filled(int c, int r) {
-		return board[c][r].filled;
-	}
-	public boolean filled(Square s) {
-		return board[s.column][s.row].filled;
 	}
 	
 	//checks if a color is in check (more precisely, if that king is being threatened
@@ -212,6 +184,51 @@ public class Board {
 		return false;
 	}
 
+	//to check if there's a piece at a given spot on the board
+	public boolean filled(int c, int r) {
+		return board[c][r].filled;
+	}
+	public boolean filled(Square s) {
+		return board[s.column][s.row].filled;
+	}
+
+	//checks if a given row/column is on the board
+	public boolean onBoard(int c, int r) {
+		return (c >= 0) && (c < 8) && (r >= 0) && (r < 8);
+	}
+	public boolean onBoard(Square s) {
+		return onBoard(s.column, s.row);
+	}
+	
+	// where you determine if there's checkmate or not;
+	public boolean resolve_check(List<Piece> checks, King k) {
+		
+		ArrayList<Square> king_spots = k.getAllMoves(this);
+		
+		List<Piece> ally = (k.getColor() == 'w') ? white_pieces : black_pieces;
+		List<Piece> enemy = (k.getColor() == 'w') ? black_pieces : white_pieces;
+		
+		for(Square s: king_spots) {
+			
+			List<Piece> spot_checks = threatens_spot(enemy, s.column, s.row);
+			
+			if(spot_checks.isEmpty())
+				return false;
+		}
+		
+		//with double check, the only possible way to escape is for the king move to a safe spot.
+		if(checks.size() < 2) {
+			
+			List<Piece> eliminate_check = threatens_spot(ally, checks.get(0).getColumn(), checks.get(0).getRow());
+			List<Piece> blocks_check = filter(ally, p -> p.canBlockPiece(checks.get(0), (Piece)k, this));
+			
+			if(!eliminate_check.isEmpty() || !blocks_check.isEmpty())
+				return false;
+		}
+		
+		return true;
+	}
+			
 	//same thing as printBoard, just returning the string instead of printing
 	public String toString() {
 		String ret = "";

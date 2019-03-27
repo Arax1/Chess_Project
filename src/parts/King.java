@@ -6,20 +6,22 @@ public class King implements Piece {
 
 	private int column, row;
 	private char color;
-	
-	public boolean hasmoved = false;
+
+	public boolean hasmoved;
 	
 	public King(int c, int r) {
 		column = c;
 		row = r;
 		
 		color = (r == 7) ? 'b' : 'w';
+		hasmoved = false;
 	}
 	public King(int c, int r, char co) {
 		column = c;
 		row = r;
 		
 		color = co;
+		hasmoved = false;
 	}
 	
 	public boolean equals(Object obj) {
@@ -39,28 +41,23 @@ public class King implements Piece {
 	
 	@Override
 	public boolean threatens(int c, int r, Board b) {
-		// TODO Auto-generated method stub
 		
-		if(r >= 0 && r < 8 && c >= 0 && c < 8) {
-			
-			if(r <= (row + 1) && r >= (row - 1) && c <= (column + 1) && c >= (column - 1)) {
+		if(c == column && r == row)
+			return false;
+		
+		if(b.onBoard(c,r))
+			if(Math.abs(c-column) < 2 && Math.abs(r-row) < 2)
 				return true;
-			}
-			
-		}
 		
 		return false;
 		
-		
 	}
-
-	@Override
 	public boolean moveTo(int c, int r, Board b) {
-		// TODO Auto-generated method stub
+		
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.filled(c,r)) {
+		if(b.board[c][r].filled) {
 			
 			if(b.board[c][r].p.getColor() == color)
 				return false;
@@ -78,11 +75,63 @@ public class King implements Piece {
 			
 		}
 		
-		column = c;
-		row = r;
-		b.en_passant = null;
 		hasmoved = true;
+		b.en_passant = null;
 		return true;
+	}
+	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
+		
+		int o_row = row;
+		int o_col = column;
+		Piece o_p = b.en_passant;
+		
+		ArrayList<Square> threat_spots = threat.getAllMoves(b);
+		
+		for(Square s: threat_spots) {
+			
+			if(moveTo(s.column, s.row, b)) {
+				
+				b.movePiece(row, column, s.column, s.row);
+				
+				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					return true;
+				}
+					
+				else {
+					
+					row = o_row;
+					column = o_col;
+					b.en_passant = o_p;
+				}
+			}
+				
+		}
+		
+		return false;
+	}
+	
+	public String toString() {
+		return getColor() + "K";
+	}
+
+	@Override
+	public ArrayList<Square> getAllMoves(Board b) {
+		// TODO Auto-generated method stub
+		ArrayList<Square> moves = new ArrayList<Square>();
+		Piece o_pas = b.en_passant;
+		
+		for(int col = 0; col < 8; col++) {
+			
+			for(int ro = 0; ro < 8; ro++) {
+				
+				if(moveTo(col, ro, b)) {
+					b.en_passant = o_pas;
+					moves.add(b.board[col][ro]);
+				}		
+			}
+		}
+		
+		return moves;
 	}
 
 	public char getColor() {
@@ -93,26 +142,14 @@ public class King implements Piece {
 		return row;
 	}
 	public int getColumn() {
-		// TODO Auto-generated method stub
 		return column;
 	}
-	
-	public String toString() {
-		return getColor() + "K";
-	}
-
 	@Override
-	public ArrayList<Square> getAllMoves(Board b) {
-		ArrayList<Square> ret = new ArrayList<Square>();
-		
-		for(int c = column - 1; c < column + 2; c++) {
-			for(int r = row - 1; r < row + 2; r++) {
-				if(b.onBoard(c, r))
-					if(c != column || r != row)
-						ret.add(b.board[c][r]);
-			}
-		}
-		
-		return ret;
+	public void setRow(int r) {
+		row = r;
+	}
+	@Override
+	public void setColumn(int c) {
+		column = c;
 	}
 }
