@@ -61,13 +61,6 @@ public class King extends Piece {
 		if(c == column && r == row)
 			return false;
 
-		if(b.filled(c,r)) {
-			if(b.board[c][r].p.getColor() == color)
-				return false;
-		}
-
-
-		else {
 			
 			/* Things to check!
 			 * 
@@ -84,62 +77,56 @@ public class King extends Piece {
 			 * Now, we know neither piece has moved, our current, middle, and future spaces are safe, and the path is clear.
 			 */
 			
-			//1 - New space threatened? If so, false.
-			List<Piece> enemy = (getColor() == 'w') ? b.black_pieces : b.white_pieces;
-			List<Piece> threats = b.threatens_spot(enemy, c, r);
+		//1 - New space threatened? If so, false.
+		if(b.threatened(c, r, color))
+			return false;
 			
-			if(!threats.isEmpty())
-				return false;
-			
-			//2 - New space in distance 1? If so, true.
-			if(threatens(c,r,b) && b.colorAt(c, r) != color) {
-				hasmoved = true;
-				b.en_passant = null;
-				return true;
-			}
-			
-			//3 - [castle] Have you ever moved before? If so, false.
-			if(hasmoved)
-				return false;
-			
-			//4 - [castle] New space potential castle (distance 2 horizontally)? If not, false.
-			int dir = (c > column) ? 1 : -1;
-			if(!(r == row && c == column + 2*dir))
-				return false;
-			
-			//5 - [castle] Currently in check? If so, false.
-			if(b.inCheck(color))
-				return false;
-			
-			//6 - [castle] Intermediate space threatened? If so, false.
-			if(b.threatened((c + column)/2, r, color))
-				return false;
-			
-			//7 - [castle] Rook in place? If not, false.
-			int rookcol = (dir == 1) ? 7 : 0;
-			if(!b.filled(rookcol, r) || !(b.pieceAt(rookcol, r) instanceof Rook))
-				return false;
-			
-			// 8 - [castle] Rook has moved? If so, false.
-			if(((Rook)b.pieceAt(rookcol, r)).hasmoved)
-				return false;
-			
-			// 9 - [castle] Anything in the way? If so, false.
-			for(int tempc = column + dir; tempc != rookcol; tempc += dir)
-				if(b.filled(tempc, r))
-					return false;
-			
-			//Apparently, we can now castle
-			Rook partner = (Rook)(b.getTileAt(rookcol, r).removePiece());
-			b.getTileAt(column + dir, r).putPiece(partner);
-			partner.hasmoved = true;
-
+		//2 - New space in distance 1? If so, true.
+		if(threatens(c,r,b) && b.colorAt(c, r) != color) {
 			hasmoved = true;
 			b.en_passant = null;
 			return true;
 		}
-		
-		return false;
+			
+		//3 - [castle] Have you ever moved before? If so, false.
+		if(hasmoved)
+			return false;
+			
+		//4 - [castle] New space potential castle (distance 2 horizontally)? If not, false.
+		int dir = (c > column) ? 1 : -1;
+		if(!(r == row && c == column + 2*dir))
+			return false;
+			
+		//5 - [castle] Currently in check? If so, false.
+		if(b.inCheck(color))
+			return false;
+			
+		//6 - [castle] Intermediate space threatened? If so, false.
+		if(b.threatened(c + dir, r, color))
+			return false;
+			
+		//7 - [castle] Rook in place? If not, false.
+		int rookcol = (dir == 1) ? 7 : 0;
+		if(!b.filled(rookcol, r) || !(b.pieceAt(rookcol, r) instanceof Rook))
+			return false;
+			
+		// 8 - [castle] Rook has moved? If so, false.
+		if(((Rook)b.pieceAt(rookcol, r)).hasmoved)
+			return false;
+			
+		// 9 - [castle] Anything in the way? If so, false.
+		for(int tempc = column + dir; tempc != rookcol; tempc += dir)
+			if(b.filled(tempc, r))
+				return false;
+			
+		//Apparently, we can now castle
+		Rook partner = (Rook)(b.getTileAt(rookcol, r).removePiece());
+		b.getTileAt(column + dir, r).putPiece(partner);
+		partner.hasmoved = true;
+
+		hasmoved = true;
+		b.en_passant = null;
+		return true;
 	}
 	
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {

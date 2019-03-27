@@ -15,7 +15,37 @@ public abstract class Piece {
 	public boolean moveTo(int c, int r, Board board) {
 		return false;
 	}
+	
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
+
+		int o_row = row;
+		int o_col = column;
+		Pawn o_p = b.en_passant;
+
+		ArrayList<Square> threat_spots = threat.getAllMoves(b);
+
+		for(Square s: threat_spots) {
+
+			if(moveTo(s.column, s.row, b)) {
+
+				b.movePiece(column, row, s.column, s.row);
+
+				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					b.movePiece(s.column, s.row, o_col, o_row);
+					b.en_passant = o_p;
+					return true;
+				}
+
+				else {
+					
+					b.movePiece(s.column, s.row, o_col, o_row);
+					b.en_passant = o_p;
+				}
+			}
+
+		}
+		
+
 		return false;
 	}
 	

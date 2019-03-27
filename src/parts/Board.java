@@ -72,6 +72,27 @@ public class Board {
 			}
 	}
 
+	
+	//makes a blank board for testing purposes
+	public static Board blankBoard() {
+		Board b = new Board();
+		b.board = new Square[8][8];
+		b.black_pieces = new ArrayList<Piece>();
+		b.white_pieces = new ArrayList<Piece>();
+		b.black_king = null;
+		b.white_king = null;
+		
+		for(int c = 0; c < 8; c++)
+			for(int r = 0; r < 8; r++)
+				b.board[c][r] = new Square(c,r);
+		
+		return b;
+	}
+	public static String brak(int a, int b) {
+		return "[" + a + "," + b + "]";
+	}
+	
+	//adds a new piece to the board and all that that entails.
 	public void addPiecePlay(int c, int r, Piece p) {
 
 		board[c][r].putPiece(p);
@@ -153,6 +174,27 @@ public class Board {
 		}
 			
 	}
+	public void movePiece(int oc, int or, int nc, int nr) {
+		Piece piece = board[oc][or].removePiece();
+		System.out.println("Moving Piece: " + piece + " to: " + board[nc][nr]);
+		
+		if(piece != null) {
+			
+			if(board[nc][nr].filled) {
+	
+				Piece captured = board[nc][nr].removePiece();
+	
+				if(captured.getColor() == 'w')
+					white_pieces.remove(captured);
+	
+				else
+					black_pieces.remove(captured);
+			}
+	
+			board[nc][nr].putPiece(piece);
+		
+		}
+	}
 	
 	public void Promotion(String promote, int column, int row) {
 		
@@ -186,28 +228,6 @@ public class Board {
 		
 	}
 	
-	public void movePiece(int oc, int or, int nc, int nr) {
-		Piece piece = board[oc][or].removePiece();
-		System.out.println("Moving Piece: " + piece + " to: " + board[nc][nr]);
-		
-		if(piece != null) {
-			
-			if(board[nc][nr].filled) {
-	
-				Piece captured = board[nc][nr].removePiece();
-	
-				if(captured.getColor() == 'w')
-					white_pieces.remove(captured);
-	
-				else
-					black_pieces.remove(captured);
-			}
-	
-			board[nc][nr].putPiece(piece);
-		
-		}
-	}
-
 	// where you determine if there's checkmate or not;
 	public boolean resolve_check(List<Piece> checks, King k) {
 
@@ -279,15 +299,20 @@ public class Board {
 	}
 	
 	public boolean threatened(int c, int r, char color) {
-		
-		List<Piece> enemy = (color == 'w') ? black_pieces : white_pieces;
-		List<Piece> threats = threatens_spot(enemy, c, r);
-		
-		if(!threats.isEmpty())
-			return false;
-		
-		return true;
 
+		if(color == 'w') {
+			for(Piece p: black_pieces)
+				if(p.threatens(c, r, this))
+					return true;
+		}
+
+		if(color == 'b') {
+			for(Piece p: white_pieces)
+				if(p.threatens(c, r, this))
+					return true;
+		}
+		
+		return false;
 	}
 	
 	//to check if there's a piece at a given spot on the board
@@ -340,5 +365,16 @@ public class Board {
 	}
 	public void printBoard() {
 		System.out.println(toString() + "\n");
+	}
+
+	public static void main(String[] args) {
+		Board b = blankBoard();
+		b.addPiecePlay(1, 7, new King(1, 7, 'b'));
+		b.addPiecePlay(0, 0, new Queen(0, 0, 'w'));
+		
+		b.printBoard();
+		if(b.pieceAt(1, 7).moveTo(0, 7, b))
+			b.movePiece(1, 7, 0, 7);
+		b.printBoard();
 	}
 }
