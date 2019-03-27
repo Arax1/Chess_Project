@@ -176,7 +176,7 @@ public class Board {
 	}
 	public void movePiece(int oc, int or, int nc, int nr) {
 		Piece piece = board[oc][or].removePiece();
-		System.out.println("Moving Piece: " + piece + " to: " + board[nc][nr]);
+		//System.out.println("Moving Piece: " + piece + " to: " + board[nc][nr]);
 		
 		if(piece != null) {
 			

@@ -81,7 +81,6 @@ public class Chess {
 
 					List<Piece> list = (king.getColor() == 'w') ? board.black_pieces : board.white_pieces;
 					List<Piece> checks = board.threatens_spot(list, king.getColumn(), king.getRow());
-					System.out.println(checks.size());
 
 					if(!checks.isEmpty()) {
 
