@@ -13,7 +13,18 @@ public abstract class Piece {
 		return false;
 	}
 	public boolean moveTo(int c, int r, Board board) {
-		return false;
+		if(!threatens(c,r,board))
+			return false;
+		
+		if(c == column && r == row)
+			return false;
+
+		if(board.filled(c,r))
+			if(board.colorAt(c,r) == color)
+				return false;
+
+		board.en_passant = null;
+		return true;
 	}
 	
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {

@@ -145,7 +145,7 @@ public class Board {
 
 	}
 
-	//move a piece from one spot to another
+	//moves a piece from one spot to another
 	public void movePiece(Square oldspot, Square newspot, String promote) {
 
 		Piece piece = oldspot.removePiece();
@@ -172,9 +172,9 @@ public class Board {
 			
 			newspot.putPiece(piece);
 		}
-			
 	}
 	public void movePiece(int oc, int or, int nc, int nr) {
+		
 		Piece piece = board[oc][or].removePiece();
 		System.out.println("Moving Piece: " + piece + " to: " + board[nc][nr]);
 		
@@ -194,6 +194,25 @@ public class Board {
 			board[nc][nr].putPiece(piece);
 		
 		}
+		
+	}
+	
+	//tries to move a piece from one spot to another
+	public boolean tryMove(Square oldspot, Square newspot, String promote) {
+		if(!oldspot.p.moveTo(newspot.column, newspot.row, this))
+			return false;
+		
+		movePiece(oldspot, newspot, promote);
+		
+		return true;
+	}
+	public boolean tryMove(int oc, int or, int nc, int nr) {
+		if(!(board[oc][or].p.moveTo(nc, nr, this)))
+			return false;
+		
+		movePiece(oc, or, nc, nr);
+		
+		return true;
 	}
 	
 	public void Promotion(String promote, int column, int row) {
@@ -373,8 +392,7 @@ public class Board {
 		b.addPiecePlay(0, 0, new Queen(0, 0, 'w'));
 		
 		b.printBoard();
-		if(b.pieceAt(1, 7).moveTo(0, 7, b))
-			b.movePiece(1, 7, 0, 7);
+		//b.movePiece(1, 7, 0, 7);
 		b.printBoard();
 	}
 }

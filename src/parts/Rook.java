@@ -70,15 +70,12 @@ public class Rook extends Piece {
 	}
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
-		if(!threatens(c,r,b))
-			return false;
-
-		if(b.board[c][r].filled)
-			if(b.board[c][r].p.getColor() == color)
-				return false;
-
-		b.en_passant = null;
-		return true;
+		boolean canmove = super.moveTo(c, r, b);
+		
+		if(!hasmoved && canmove)
+			hasmoved = true;
+			
+		return canmove;
 	}
 	
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
@@ -124,13 +121,11 @@ public class Rook extends Piece {
 	public char getColor() {
 		return color;
 	}
-
 	@Override
 	public int getRow() {
 		// TODO Auto-generated method stub
 		return row;
 	}
-
 	@Override
 	public int getColumn() {
 		// TODO Auto-generated method stub

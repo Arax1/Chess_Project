@@ -66,23 +66,6 @@ public class Knight extends Piece {
 
 		return false;
 	}
-	@Override
-	public boolean moveTo(int c, int r, Board b) {
-
-		//System.out.println("Current Row and Collumn: " + row + " " + column);
-		//System.out.println("Destination Row and Collumn: " + r + " " + c);
-
-		if(!threatens(c,r,b))
-			return false;
-
-		if(b.board[c][r].filled)
-			if(b.board[c][r].p.getColor() == color)
-				return false;
-
-		b.en_passant = null;
-		return true;
-	}
-	
 
 	public String toString() {
 		return getColor() + "N";
