@@ -13,12 +13,6 @@ public class Knight implements Piece {
 		
 		color = (r == 7) ? 'b' : 'w';
 	}
-	public Knight(int c, int r, char co) {
-		column = c;
-		row = r;
-		
-		color = co;
-	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -83,23 +77,55 @@ public class Knight implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.filled(c,r))
+		if(b.board[c][r].filled)
 			if(b.board[c][r].p.getColor() == color)
 				return false;
 		
-		column = c;
-		row = r;
 		b.en_passant = null;
 		return true;
+	}
+	
+	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
+		
+		int o_row = row;
+		int o_col = column;
+		Piece o_p = b.en_passant;
+		
+		ArrayList<Square> threat_spots = threat.getAllMoves(b);
+		
+		for(Square s: threat_spots) {
+			
+			if(moveTo(s.column, s.row, b)) {
+				
+				b.movePiece(row, column, s.column, s.row);
+				
+				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					return true;
+				}
+					
+				else {
+					
+					row = o_row;
+					column = o_col;
+					b.en_passant = o_p;
+				}
+			}
+				
+		}
+		
+		return false;
 	}
 	
 	public char getColor() {
 		return color;
 	}
+	
+
 	public int getRow() {
 		// TODO Auto-generated method stub
 		return row;
 	}
+
 	public int getColumn() {
 		// TODO Auto-generated method stub
 		return column;
@@ -111,35 +137,33 @@ public class Knight implements Piece {
 
 	@Override
 	public ArrayList<Square> getAllMoves(Board b) {
-		ArrayList<Square> ret = new ArrayList<Square>();
+		// TODO Auto-generated method stub
+		ArrayList<Square> moves = new ArrayList<Square>();
+		Piece o_pas = b.en_passant;
 		
-		for(int c = column - 1; c <= column + 1; c += 2) {
-			for(int r = row - 2; r <= row + 2; r += 4) {
-				if(b.onBoard(c, r))
-					ret.add(b.board[c][r]);
+		for(int col = 0; col < 8; col++) {
+			
+			for(int ro = 0; ro < 8; ro++) {
+				
+				if(moveTo(col, ro, b)) {
+					b.en_passant = o_pas;
+					moves.add(b.board[col][ro]);
+				}		
 			}
 		}
 		
-		for(int c = column - 2; c <= column + 2; c += 4) {
-			for(int r = row - 1; r <= row + 1; r += 2) {
-				if(b.onBoard(c, r))
-					ret.add(b.board[c][r]);
-			}
-		}
-		
-		return ret;
+		return moves;
 	}
 	
-	/*public static void main(String[] args) {
-		Board b = new Board();
-		Piece p = b.board[1][0].p;
-		
+	@Override
+	public void setRow(int r) {
+		// TODO Auto-generated method stub
+		row = r;
+	}
 
-		p.moveTo(2, 2, b);
-		b.movePiece(1, 0, 2, 2);
-		
-		System.out.println(b);
-		for(Square s: p.getAllMoves(b))
-			System.out.println(s);
-	}*/
+	@Override
+	public void setColumn(int c) {
+		// TODO Auto-generated method stub
+		column = c;
+	}
 }
