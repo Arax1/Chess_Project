@@ -46,6 +46,10 @@ public class Pawn implements Piece {
 	    return this.row == o.row && this.column == o.column;
 	}
 	
+	public char getColor() {
+		return color;
+	}
+	
 	
 	public String toString() {
 		return getColor() + "P";
@@ -76,21 +80,17 @@ public class Pawn implements Piece {
 		int direction = (color == 'w') ? 1 : -1;
 		int hop = (hasmoved) ? 0 : direction;
 		
-		if(!b.filled(column,row + direction)) {
+		if(!b.board[column][row + direction].filled) {
 			
 			if(newr == row + direction && newc == column) {
 				hasmoved = true;
-				row = newr;
-				column = newc;
 				b.en_passant = null;
 				return true;
 			}
 			
-			else if(newr == row + direction + hop && newc == column && (!b.filled(newc, newr))) {
+			else if(newr == row + direction + hop && newc == column && (!b.board[newc][newr].filled)) {
 				hasmoved = true;
-				row = newr;
 				b.en_passant = this;
-				column = newc;
 				return true;
 			}
 		}
@@ -98,24 +98,20 @@ public class Pawn implements Piece {
 		if(threatens(newc, newr, b)) {
 			
 			//regular taking a piece
-			if(b.filled(newc, newr) && b.board[newc][newr].p.getColor() != color) {
+			if(b.board[newc][newr].filled && b.board[newc][newr].p.getColor() != color) {
 				hasmoved = true;
-				row = newr;
-				column = newc;
 				b.en_passant = null;
 				return true;
 			}
 			
 			//en passant
-			else if(b.filled(newc, row)) {
+			else if(b.board[newc][row].filled) {
 				if(b.board[newc][row].p instanceof Pawn) {
 					if(b.board[newc][row].p.equals(b.en_passant)) {
 						
 						@SuppressWarnings("unused")
 						Piece pas = b.board[newc][row].removePiece();
 						hasmoved = true;
-						row = newr;
-						column = newc;
 						b.en_passant = null;
 						return true;
 					}
@@ -125,65 +121,80 @@ public class Pawn implements Piece {
 			
 		return false;
 	}
+	
+	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
+		
+		int o_row = row;
+		int o_col = column;
+		Piece o_p = b.en_passant;
+		
+		ArrayList<Square> threat_spots = threat.getAllMoves(b);
+		
+		for(Square s: threat_spots) {
+			
+			if(moveTo(s.column, s.row, b)) {
+				
+				b.movePiece(row, column, s.column, s.row);
+				
+				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					return true;
+				}
+					
+				else {
+					
+					row = o_row;
+					column = o_col;
+					b.en_passant = o_p;
+				}
+			}
+				
+		}
+		
+		return false;
+	}
 
 	@Override
 	public int getRow() {
 		// TODO Auto-generated method stub
 		return row;
 	}
+
 	@Override
 	public int getColumn() {
 		// TODO Auto-generated method stub
 		return column;
 	}
-	public char getColor() {
-		return color;
+
+	@Override
+	public ArrayList<Square> getAllMoves(Board b) {
+		// TODO Auto-generated method stub
+		ArrayList<Square> moves = new ArrayList<Square>();
+		Piece o_pas = b.en_passant;
+		
+		for(int col = 0; col < 8; col++) {
+			
+			for(int ro = 0; ro < 8; ro++) {
+				
+				if(moveTo(col, ro, b)) {
+					b.en_passant = o_pas;
+					moves.add(b.board[col][ro]);
+				}		
+			}
+		}
+		
+		return moves;
 	}
 
 	@Override
-	public ArrayList<Square> getAllMoves(Board board) {
+	public void setRow(int r) {
 		// TODO Auto-generated method stub
-		
-		ArrayList<Square> moves = new ArrayList<Square>();
-		
-		int dir = (color == 'w') ? 1 : -1;
-		
-		
-		//check diagonals
-		if(board.onBoard(column - 1, row + dir)) {
-			
-			//check regular take or en passant
-			if(board.filled(column - 1, row + dir) || 
-					(board.filled(column - 1, row) && board.getTileAt(column - 1, row).p instanceof Pawn)) {
-					
-				moves.add(new Square(column - 1, row + dir));
-			}
-		}
-		
-		if(board.onBoard(column + 1, row + dir)) {
-			
-			//regular take or en passant
-			if(board.getTileAt(column + 1, row + dir).filled || 
-					(board.filled(column + 1, row) && board.getTileAt(column + 1, row).p instanceof Pawn)) {
-			
-				moves.add(new Square(column + 1, row + dir));
-			}
-		}
-		
-		//check moving up
-		if(board.onBoard(column, row + dir)) {
-			if(!board.filled(column, row + dir)) {
-				
-				moves.add(new Square(column, row + dir));
-				
-				if(!hasmoved)
-					if(board.onBoard(column, row + 2*dir))
-						if(!board.filled(column, row + 2*dir))
-							moves.add(new Square(column, row + 2*dir));
-			}
-		}
-			
-		return moves;
+		row = r;
+	}
+
+	@Override
+	public void setColumn(int c) {
+		// TODO Auto-generated method stub
+		column = c;
 	}
 
 	
