@@ -180,10 +180,16 @@ public class Board {
 		return filter(list, p -> p.threatens(c, r, this));
 	}
 	
+	//to check if a certain column and row are within the board's boundaries
 	public boolean onBoard(int c, int r) {
 		if(c < 0 || c > 7 || r < 0 || r > 7)
 			return false;
 		return true;
+	}
+
+	//to check if there's a piece at a given spot on the board
+	public boolean filled(int c, int r) {
+		return board[c][r].filled;
 	}
 	
 	//checks if a color is in check (more precisely, if that king is being threatened

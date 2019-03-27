@@ -76,7 +76,7 @@ public class Pawn implements Piece {
 		int direction = (color == 'w') ? 1 : -1;
 		int hop = (hasmoved) ? 0 : direction;
 		
-		if(!b.board[column][row + direction].filled) {
+		if(!b.filled(column,row + direction)) {
 			
 			if(newr == row + direction && newc == column) {
 				hasmoved = true;
@@ -86,7 +86,7 @@ public class Pawn implements Piece {
 				return true;
 			}
 			
-			else if(newr == row + direction + hop && newc == column && (!b.board[newc][newr].filled)) {
+			else if(newr == row + direction + hop && newc == column && (!b.filled(newc, newr))) {
 				hasmoved = true;
 				row = newr;
 				b.en_passant = this;
@@ -98,7 +98,7 @@ public class Pawn implements Piece {
 		if(threatens(newc, newr, b)) {
 			
 			//regular taking a piece
-			if(b.board[newc][newr].filled && b.board[newc][newr].p.getColor() != color) {
+			if(b.filled(newc, newr) && b.board[newc][newr].p.getColor() != color) {
 				hasmoved = true;
 				row = newr;
 				column = newc;
@@ -107,7 +107,7 @@ public class Pawn implements Piece {
 			}
 			
 			//en passant
-			else if(b.board[newc][row].filled) {
+			else if(b.filled(newc, row)) {
 				if(b.board[newc][row].p instanceof Pawn) {
 					if(b.board[newc][row].p.equals(b.en_passant)) {
 						
@@ -145,21 +145,41 @@ public class Pawn implements Piece {
 		// TODO Auto-generated method stub
 		
 		ArrayList<Square> moves = new ArrayList<Square>();
-		boolean old_moved = hasmoved;
-		int old_row = row;
-		int old_col = column;
-		Piece old_pas = board.en_passant;
 		
-		for(int col = 0; col < 8; col++) {
+		int dir = (color == 'w') ? 1 : -1;
+		
+		
+		//check diagonals
+		if(board.onBoard(column - 1, row + dir)) {
 			
-			for(int ro = 0; ro < 8; ro++){
+			//check regular take or en passant
+			if(board.filled(column - 1, row + dir) || 
+					(board.filled(column - 1, row) && board.getTileAt(column - 1, row).p instanceof Pawn)) {
+					
+				moves.add(new Square(column - 1, row + dir));
+			}
+		}
+		
+		if(board.onBoard(column + 1, row + dir)) {
+			
+			//regular take or en passant
+			if(board.getTileAt(column + 1, row + dir).filled || 
+					(board.filled(column + 1, row) && board.getTileAt(column + 1, row).p instanceof Pawn)) {
+			
+				moves.add(new Square(column + 1, row + dir));
+			}
+		}
+		
+		//check moving up
+		if(board.onBoard(column, row + dir)) {
+			if(!board.filled(column, row + dir)) {
 				
-				if(threatens(col, ro, board) || moveTo(col, ro, board))
-					moves.add(board.board[col][ro]);
-					hasmoved = old_moved;
-					row = old_row;
-					column = old_col;
-					board.en_passant = old_pas;
+				moves.add(new Square(column, row + dir));
+				
+				if(!hasmoved)
+					if(board.onBoard(column, row + 2*dir))
+						if(!board.filled(column, row + 2*dir))
+							moves.add(new Square(column, row + 2*dir));
 			}
 		}
 			
