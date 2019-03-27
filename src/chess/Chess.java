@@ -1,3 +1,10 @@
+/**
+ * 
+ * 
+ * 
+ * 
+ * */
+
 package chess;
 
 import java.util.List;
@@ -33,8 +40,11 @@ public class Chess {
 			player = turns % 2 == 0 ? "White" : "Black";
 			king = (pc == 'w')? board.black_king: board.white_king;
 
-			if(checkmate)
+			if(checkmate) {
+				draw = false;
 				break;
+			}
+				
 
 			System.out.print(player + "'s move: ");
 			str = scan.nextLine();
@@ -100,7 +110,12 @@ public class Chess {
 		
 		scan.close();
 		turns++;
-		System.out.println(player + " wins!");
+		
+		if(draw)
+			System.out.println("draw");
+		
+		else
+			System.out.println(player + " wins!");
 
 	}
 	
