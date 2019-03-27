@@ -14,13 +14,6 @@ public class Queen implements Piece {
 		color = (r == 7) ? 'b' : 'w';
 	}
 	
-	public Queen(int c, int r, char co) {
-		column = c;
-		row = r;
-		
-		color = co;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -49,7 +42,7 @@ public class Queen implements Piece {
 		if(c == column) {
 			int direction = (r > row) ? 1 : -1;
 			for(int x = row + direction; x != r; x += direction)
-				if(b.filled(c,x))
+				if(b.board[c][x].filled)
 					return false;
 			
 			return true;
@@ -58,7 +51,7 @@ public class Queen implements Piece {
 		if(r == row) {
 			int direction = (c > column) ? 1 : -1;
 			for(int x = column + direction; x != c; x+= direction)
-				if(b.filled(x,r))
+				if(b.board[x][r].filled)
 					return false;
 			
 			return true;
@@ -93,7 +86,7 @@ public class Queen implements Piece {
 				return false;
 			
 			else {
-				if(b.filled(index_c,index_r))
+				if(b.board[index_c][index_r].filled)
 					return false;
 				
 				index_r += r_mod;
@@ -117,14 +110,43 @@ public class Queen implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.filled(c,r))
+		if(b.board[c][r].filled)
 			if(b.board[c][r].p.getColor() == color)
 				return false;
 		
-		column = c;
-		row = r;
 		b.en_passant = null;
 		return true;
+	}
+	
+	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
+		
+		int o_row = row;
+		int o_col = column;
+		Piece o_p = b.en_passant;
+		
+		ArrayList<Square> threat_spots = threat.getAllMoves(b);
+		
+		for(Square s: threat_spots) {
+			
+			if(moveTo(s.column, s.row, b)) {
+				
+				b.movePiece(row, column, s.column, s.row);
+				
+				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
+					return true;
+				}
+					
+				else {
+					
+					row = o_row;
+					column = o_col;
+					b.en_passant = o_p;
+				}
+			}
+				
+		}
+		
+		return false;
 	}
 
 	public char getColor() {
@@ -148,73 +170,32 @@ public class Queen implements Piece {
 	}
 
 	@Override
-	public ArrayList<Square> getAllMoves(Board board) {
+	public void setRow(int r) {
 		// TODO Auto-generated method stub
-		
+		row = r;
+	}
+
+	@Override
+	public void setColumn(int c) {
+		// TODO Auto-generated method stub
+		column = c;
+	}
+
+	@Override
+	public ArrayList<Square> getAllMoves(Board b) {
+		// TODO Auto-generated method stub
 		ArrayList<Square> moves = new ArrayList<Square>();
+		Piece o_pas = b.en_passant;
 		
-		//up
-		for(int r = row + 1; r < 8; r++) {
-			moves.add(new Square(column, r));
+		for(int col = 0; col < 8; col++) {
 			
-			if(board.filled(column, r))
-				break;
-		}
-		
-		//up-right
-		for(int delta = 1; board.onBoard(column + delta, row + delta); delta++) {
-			moves.add(new Square(column + delta, row + delta));
-			
-			if(board.filled(column + delta, row + delta))
-				break;
-		}
-		
-		//right
-		for(int c = column + 1; c < 8; c++) {
-			moves.add(new Square(c, row));
-			
-			if(board.filled(c, row))
-				break;
-		}
-		
-		//down-right
-		for(int delta = 1; board.onBoard(column + delta, row - delta); delta++) {
-			moves.add(new Square(column + delta, row - delta));
-			
-			if(board.filled(column + delta, row - delta))
-				break;
-		}
-		
-		//down
-		for(int r = row - 1; r >= 0; r--) {
-			moves.add(new Square(column, r));
-			
-			if(board.filled(column, r))
-				break;
-		}
-		
-		//down-left
-		for(int delta = 1; board.onBoard(column - delta, row - delta); delta++) {
-			moves.add(new Square(column - delta, row - delta));
-			
-			if(board.filled(column - delta, row - delta))
-				break;
-		}
-		
-		//left
-		for(int c = column - 1; c >= 0; c--) {
-			moves.add(new Square(c, row));
-			
-			if(board.filled(c, row))
-				break;
-		}
-		
-		//up-left
-		for(int delta = 1; board.onBoard(column - delta, row + delta); delta++) {
-			moves.add(new Square(column - delta, row + delta));
-			
-			if(board.filled(column - delta, row + delta))
-				break;
+			for(int ro = 0; ro < 8; ro++) {
+				
+				if(moveTo(col, ro, b)) {
+					b.en_passant = o_pas;
+					moves.add(b.board[col][ro]);
+				}		
+			}
 		}
 		
 		return moves;
