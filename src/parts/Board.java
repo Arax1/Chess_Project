@@ -191,6 +191,9 @@ public class Board {
 	public boolean filled(int c, int r) {
 		return board[c][r].filled;
 	}
+	public boolean filled(Square s) {
+		return board[s.column][s.row].filled;
+	}
 	
 	//checks if a color is in check (more precisely, if that king is being threatened
 	public boolean inCheck(char c) {

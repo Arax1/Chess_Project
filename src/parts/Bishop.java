@@ -62,7 +62,7 @@ public class Bishop implements Piece {
 				return false;
 			
 			else {
-				if(b.board[cindex][rindex].filled)
+				if(b.filled(cindex,rindex))
 					return false;
 				
 				rindex += r_mod;
@@ -84,7 +84,7 @@ public class Bishop implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.board[c][r].filled) {
+		if(b.filled(c,r)) {
 			char pcolor = b.board[c][r].p.getColor();
 			//System.out.println("Piece: " + b.board[c][r].p + " Color: " + pcolor );
 			if(b.board[c][r].p.getColor() == color)

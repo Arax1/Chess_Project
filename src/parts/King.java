@@ -60,7 +60,7 @@ public class King implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.board[c][r].filled) {
+		if(b.filled(c,r)) {
 			
 			if(b.board[c][r].p.getColor() == color)
 				return false;

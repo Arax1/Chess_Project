@@ -13,7 +13,6 @@ public class Knight implements Piece {
 		
 		color = (r == 7) ? 'b' : 'w';
 	}
-	
 	public Knight(int c, int r, char co) {
 		column = c;
 		row = r;
@@ -84,7 +83,7 @@ public class Knight implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.board[c][r].filled)
+		if(b.filled(c,r))
 			if(b.board[c][r].p.getColor() == color)
 				return false;
 		
@@ -97,13 +96,10 @@ public class Knight implements Piece {
 	public char getColor() {
 		return color;
 	}
-	
-
 	public int getRow() {
 		// TODO Auto-generated method stub
 		return row;
 	}
-
 	public int getColumn() {
 		// TODO Auto-generated method stub
 		return column;

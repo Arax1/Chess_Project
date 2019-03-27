@@ -49,7 +49,7 @@ public class Rook implements Piece {
 		if(c == column) {
 			int direction = (r > row) ? 1 : -1;
 			for(int x = row + direction; x != r; x += direction)
-				if(b.board[c][x].filled)
+				if(b.filled(c,x))
 					return false;
 			
 			return true;
@@ -58,7 +58,7 @@ public class Rook implements Piece {
 		if(r == row) {
 			int direction = (c > column) ? 1 : -1;
 			for(int x = column + direction; x != c; x+= direction)
-				if(b.board[x][r].filled)
+				if(b.filled(c, x))
 					return false;
 			
 			return true;
@@ -72,7 +72,7 @@ public class Rook implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 		
-		if(b.board[c][r].filled)
+		if(b.filled(c,r))
 			if(b.board[c][r].p.getColor() == color)
 				return false;
 		

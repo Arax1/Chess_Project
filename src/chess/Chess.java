@@ -66,6 +66,8 @@ public class Chess {
 					
 					System.out.print("\n");
 
+					/** Note! If you can't move but aren't in check, you are in stalemate! **/
+					
 					if(board.inCheck(oc)) {
 						
 						System.out.println("In check! Will check for checkmate.");
@@ -134,7 +136,7 @@ public class Chess {
 			for(Square s: p.getAllMoves(newboard)) {
 				
 				//if filled, save the piece for later
-				if(b.getTileAt(s).filled) {
+				if(b.filled(s)) {
 					temp = b.getTileAt(s).p;
 				}
 				
