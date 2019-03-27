@@ -6,61 +6,61 @@ public class Queen implements Piece {
 
 	private int column, row;
 	private char color;
-	
+
 	public Queen(int c, int r) {
 		column = c;
 		row = r;
-		
+
 		color = (r == 7) ? 'b' : 'w';
 	}
 	public Queen(int c, int r, char co) {
 		column = c;
 		row = r;
-		
+
 		color = co;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		
-	    if (obj == null) 
+
+	    if (obj == null)
 	    	return false;
-	    
-	    if (obj == this) 
+
+	    if (obj == this)
 	    	return true;
-	    
-	    if (!(obj instanceof Queen)) 
+
+	    if (!(obj instanceof Queen))
 	    	return false;
-	    
+
 	    Queen o = (Queen) obj;
 	    return this.row == o.row && this.column == o.column;
 	}
-	
+
 	@Override
 	public boolean threatens(int c, int r, Board b) {
-		
+
 		if(c == column && r == row)
 			return false;
-		
+
 		int updown = PosOrNeg(r - row);
 		int leftright = PosOrNeg(c - column);
-		
+
 		int tempc = c + leftright;
 		int tempr = r + updown;
-		
+
 		for(int delta = 1; b.onBoard(c,r); delta++) {
-			
+
 			if(c == tempc && r == tempr)
 				return true;
-			
+
 			if(b.filled(tempc, tempr))
 				return false;
-			
+
 			tempc += leftright;
 			tempr += updown;
-			
+
 		}
-		
+
 		return false;
 	}
 
@@ -78,42 +78,42 @@ public class Queen implements Piece {
 		// TODO Auto-generated method stub
 		if(!threatens(c,r,b))
 			return false;
-		
+
 		if(b.board[c][r].filled)
 			if(b.board[c][r].p.getColor() == color)
 				return false;
-		
+
 		b.en_passant = null;
 		return true;
 	}
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
-		
+
 		int o_row = row;
 		int o_col = column;
 		Piece o_p = b.en_passant;
-		
+
 		ArrayList<Square> threat_spots = threat.getAllMoves(b);
-		
+
 		for(Square s: threat_spots) {
-			
+
 			if(moveTo(s.column, s.row, b)) {
-				
+
 				b.movePiece(row, column, s.column, s.row);
-				
+
 				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
 					return true;
 				}
-					
+
 				else {
-					
+
 					row = o_row;
 					column = o_col;
 					b.en_passant = o_p;
 				}
 			}
-				
+
 		}
-		
+
 		return false;
 	}
 
@@ -147,71 +147,72 @@ public class Queen implements Piece {
 	@Override
 	public ArrayList<Square> getAllMoves(Board b) {
 		ArrayList<Square> moves = new ArrayList<Square>();
-		
+		Piece o_pas = b.en_passant;
+
 		//up
 		for(int r = row + 1; r < 8; r++) {
 			moves.add(new Square(column, r));
-			
+
 			if(b.filled(column, r))
 				break;
 		}
-		
+
 		//up-right
 		for(int delta = 1; b.onBoard(column + delta, row + delta); delta++) {
 			moves.add(new Square(column + delta, row + delta));
-			
+
 			if(b.filled(column + delta, row + delta))
 				break;
 		}
-		
+
 		//right
 		for(int c = column + 1; c < 8; c++) {
 			moves.add(new Square(c, row));
-			
+
 			if(b.filled(c, row))
 				break;
 		}
-		
+
 		//down-right
 		for(int delta = 1; b.onBoard(column + delta, row - delta); delta++) {
 			moves.add(new Square(column + delta, row - delta));
-			
+
 			if(b.filled(column + delta, row - delta))
 				break;
 		}
-		
+
 		//down
 		for(int r = row - 1; r >= 0; r--) {
 			moves.add(new Square(column, r));
-			
+
 			if(b.filled(column, r))
 				break;
 		}
-		
+
 		//down-left
 		for(int delta = 1; b.onBoard(column - delta, row - delta); delta++) {
 			moves.add(new Square(column - delta, row - delta));
-			
+
 			if(b.filled(column - delta, row - delta))
 				break;
 		}
-		
+
 		//left
 		for(int c = column - 1; c >= 0; c--) {
 			moves.add(new Square(c, row));
-			
+
 			if(b.filled(c, row))
 				break;
 		}
-		
+
 		//up-left
 		for(int delta = 1; b.onBoard(column - delta, row + delta); delta++) {
 			moves.add(new Square(column - delta, row + delta));
-			
+
 			if(b.filled(column - delta, row + delta))
 				break;
 		}
-		
+
 		return moves;
 	}
 }
