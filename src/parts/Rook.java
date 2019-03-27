@@ -50,24 +50,32 @@ public class Rook extends Piece {
 
 		if(c == column) {
 			int direction = (r > row) ? 1 : -1;
-			for(int x = row + direction; x != r; x += direction)
-				if(b.board[c][x].filled)
-					return false;
+			for(int x = row + direction; x != r; x += direction) {
+				
+				if(b.onBoard(c,x))
+					if(b.board[c][x].filled)
+						return false;
+			}
 
 			return true;
 		}
 
 		if(r == row) {
 			int direction = (c > column) ? 1 : -1;
-			for(int x = column + direction; x != c; x+= direction)
-				if(b.board[x][r].filled)
-					return false;
-
+			for(int x = column + direction; x != c; x+= direction) {
+				
+				if(b.onBoard(c,x))
+					if(b.board[c][x].filled)
+						return false;
+				
+			}
+				
 			return true;
 		}
 
 		return false;
 	}
+	
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
 		boolean canmove = super.moveTo(c, r, b);

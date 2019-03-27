@@ -1,7 +1,8 @@
 /**
+ * @author Anand Raju
+ * @author Sammy Berger
  * 
- * 
- * 
+ * <h1>Main Chess Program<h1>
  * 
  * */
 
