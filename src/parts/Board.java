@@ -10,9 +10,9 @@ public class Board {
 	public ArrayList<Piece> black_pieces;
 	public ArrayList<Piece> white_pieces;
 
-	public Piece en_passant = null;
-	public Piece black_king;
-	public Piece white_king;
+	public Pawn en_passant = null;
+	public King black_king;
+	public King white_king;
 
 	public Board() {
 
@@ -79,44 +79,52 @@ public class Board {
 		if(p.getColor() == 'w') {
 
 			if(p instanceof King)
-				white_king = p;
+				white_king = (King)p;
 
-			else
-				white_pieces.add(p);
+			white_pieces.add(p);
 
 		}
 
 		else if(p.getColor() == 'b') {
 
 			if(p instanceof King)
-				black_king = p;
+				black_king = (King)p;
 
-			else
-				black_pieces.add(p);
+			black_pieces.add(p);
 
 		}
 
 	}
 
+	//get the specified tile
 	public Square getTileAt(int c, int r) {
 
 		return board[c][r];
 
 	}
-
 	public Square getTileAt(Square s) {
 		return getTileAt(s.column, s.row);
 	}
-
 	public Square getTileAt(String s) {
 
-		int row = s.charAt(0) - 'a' + 1;
-		int col = Character.getNumericValue(s.charAt(1));
+		int row = s.charAt(0) - 'a';
+		int col = Character.getNumericValue(s.charAt(1)) - 1;
 
-		return board[row - 1][col - 1];
+		if(onBoard(row,col))
+			return board[row][col];
+		
+		/*maybe we should just throw an error?*/
+		int boundrow = 0, boundcol = 0;
+		if(row > 7)
+			boundrow = 7;
+		if(col > 7)
+			boundcol = 7;
+		
+		return board[boundrow][boundcol];
 
 	}
 
+	//move a piece from one spot to another
 	public void movePiece(Square oldspot, Square newspot) {
 
 		Piece piece = oldspot.removePiece();
@@ -135,7 +143,6 @@ public class Board {
 		newspot.putPiece(piece);
 
 	}
-
 	public void movePiece(int oc, int or, int nc, int nr) {
 		Piece piece = board[oc][or].removePiece();
 
@@ -153,6 +160,37 @@ public class Board {
 		board[nc][nr].putPiece(piece);
 	}
 
+	// where you determine if there's checkmate or not;
+	public boolean resolve_check(List<Piece> checks, King k) {
+
+			ArrayList<Square> king_spots = k.getAllMoves(this);
+
+			List<Piece> ally = (k.getColor() == 'w') ? white_pieces : black_pieces;
+			List<Piece> enemy = (k.getColor() == 'w') ? black_pieces : white_pieces;
+
+			for(Square s: king_spots) {
+
+				List<Piece> spot_checks = threatens_spot(enemy, s.column, s.row);
+
+				if(spot_checks.isEmpty())
+					return false;
+			}
+
+			//with double check, the only possible way to escape is for the king move to a safe spot.
+			if(checks.size() < 2) {
+
+				List<Piece> eliminate_check = threatens_spot(ally, checks.get(0).getColumn(), checks.get(0).getRow());
+				List<Piece> blocks_check = filter(ally, p -> p.canBlockPiece(checks.get(0), (Piece)k, this));
+
+				if(!eliminate_check.isEmpty() || !blocks_check.isEmpty())
+					return false;
+			}
+
+			return true;
+		}
+
+	
+	//methods to find what pieces threaten a certain spot
 	public static <T> List<T> filter(List<T> list, Predicate<T> p){
 
 		List<T> result = new ArrayList<T>();
@@ -169,20 +207,32 @@ public class Board {
 		// TODO Auto-generated method stub
 		return filter(list, p -> p.threatens(c, r, this));
 	}
-
-	//checks if a color is in check (more precisely, if that king is being threatened
+	
+	
+	/** Minor methods that can be reused often to save lines of code **/
+	
+	//checks if a color is in check, or if a general piece of a color in a square would be threatened
 	public boolean inCheck(char c) {
+		King k = (c == 'w') ? white_king : black_king;
+		
+		return threatened(k.getColumn(), k.getRow(), c);
+	}
+	public boolean threatened(int c, int r, char color) {
 		if(c == 'w') {
 			for(Piece p: black_pieces)
-				if(p.threatens(white_king.getColumn(), white_king.getRow(), this))
+				if(p.threatens(c, r, this))
 					return true;
 		}
-
-		ArrayList<Square> king_spots = k.getAllMoves(this);
-
+		
+		if(c == 'b') {
+			for(Piece p: white_pieces)
+				if(p.threatens(c, r, this))
+					return true;
+		}
+		
 		return false;
 	}
-
+	
 	//to check if there's a piece at a given spot on the board
 	public boolean filled(int c, int r) {
 		return board[c][r].filled;
@@ -199,57 +249,39 @@ public class Board {
 		return onBoard(s.column, s.row);
 	}
 
-	// where you determine if there's checkmate or not;
-	public boolean resolve_check(List<Piece> checks, King k) {
-
-		ArrayList<Square> king_spots = k.getAllMoves(this);
-
-		List<Piece> ally = (k.getColor() == 'w') ? white_pieces : black_pieces;
-		List<Piece> enemy = (k.getColor() == 'w') ? black_pieces : white_pieces;
-
-		for(Square s: king_spots) {
-
-			List<Piece> spot_checks = threatens_spot(enemy, s.column, s.row);
-
-			if(spot_checks.isEmpty())
-				return false;
-		}
-
-		//with double check, the only possible way to escape is for the king move to a safe spot.
-		if(checks.size() < 2) {
-
-			List<Piece> eliminate_check = threatens_spot(ally, checks.get(0).getColumn(), checks.get(0).getRow());
-			List<Piece> blocks_check = filter(ally, p -> p.canBlockPiece(checks.get(0), (Piece)k, this));
-
-			if(!eliminate_check.isEmpty() || !blocks_check.isEmpty())
-				return false;
-		}
-
-		return true;
+	//checks the color of a given square
+	public char colorAt(int c, int r) {
+		if(!filled(c,r))
+			return 'n';
+		return board[c][r].p.getColor();
 	}
-
-	//same thing as printBoard, just returning the string instead of printing
+	
+	//gets you the piece at a location
+	public Piece pieceAt(int c, int r) {
+		return board[c][r].p;
+	}
+	
+	//returns the string of the board
 	public String toString() {
 		String ret = "";
 
-		for(Square s: king_spots) {
-
-			List<Piece> spot_checks = threatens_spot(enemy, s.column, s.row);
-
-			if(spot_checks.isEmpty())
-				return false;
+		for(int r = 7; r >= 0; r--) {
+			for(int c = 0; c < 8; c++) {
+				ret += board[c][r] + " ";
+			}
+			ret += (r+1) + "\n";
 		}
-
-		//with double check, the only possible way to escape is for the king move to a safe spot.
-		if(checks.size() < 2) {
-
-			List<Piece> eliminate_check = threatens_spot(ally, checks.get(0).getColumn(), checks.get(0).getRow());
-			List<Piece> blocks_check = filter(ally, p -> p.canBlockPiece(checks.get(0), (Piece)k, this));
-
-			if(!eliminate_check.isEmpty() || !blocks_check.isEmpty())
-				return false;
+		
+		for(char c = 'a'; c <= 'h'; c++) {
+			ret += " " + c;
+			
+			if(c != 'h')
+				ret += " ";
 		}
-
-		return true;
+		
+		return ret;
+	}
+	public void printBoard() {
+		System.out.println(toString() + "\n");
 	}
 }

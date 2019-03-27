@@ -10,7 +10,6 @@ public class Square {
 		column = c;
 		filled = false;
 	}
-	
 	public Square(int c, int r, Piece in) {
 		row = r;
 		column = c;
@@ -27,8 +26,6 @@ public class Square {
 		filled = true;
 		
 	}
-	
-	
 	public Piece removePiece() {
 		Piece pout = p;
 		p = null;
@@ -45,5 +42,8 @@ public class Square {
 		} else {
 			return p.toString();
 		}
+	}
+	public String pos() {
+		return "[" + column + "," + row + "]";
 	}
 }

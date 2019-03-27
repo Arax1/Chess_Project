@@ -117,7 +117,7 @@ public class Pawn implements Piece {
 
 		int o_row = row;
 		int o_col = column;
-		Piece o_p = b.en_passant;
+		Pawn o_p = b.en_passant;
 
 		ArrayList<Square> threat_spots = threat.getAllMoves(b);
 
@@ -145,24 +145,40 @@ public class Pawn implements Piece {
 	}
 
 	@Override
-	public ArrayList<Square> getAllMoves(Board board) {
+	public ArrayList<Square> getAllMoves(Board b) {
 		ArrayList<Square> moves = new ArrayList<Square>();
-		Piece o_pas = b.en_passant;
 
 		int dir = (color == 'w') ? 1 : -1;
 
 		//check diagonals
-		if(board.onBoard(column - 1, row + dir)) {
-
-			for(int ro = 0; ro < 8; ro++) {
-
-				if(moveTo(col, ro, b)) {
-					b.en_passant = o_pas;
-					moves.add(b.board[col][ro]);
-				}
+		if(b.onBoard(column - 1, row + dir) && b.filled(column - 1, row + dir)) {
+			moves.add(new Square(column - 1, row + dir));
+		}
+		if(b.onBoard(column + 1, row + dir) &&b.getTileAt(column + 1, row + dir).filled) {
+			moves.add(new Square(column + 1, row + dir));
+		}
+		
+		//check moving up
+		if(b.onBoard(column, row + dir)) {
+			if(!b.filled(column, row + dir)) {
+						
+				moves.add(new Square(column, row + dir));
+						
+				if(!hasmoved)
+					if(b.onBoard(column, row + 2*dir))
+						if(!b.filled(column, row + 2*dir))
+							moves.add(new Square(column, row + 2*dir));
 			}
 		}
-
+		
+		//check en passant
+		if(b.en_passant != null && b.en_passant.color != color && b.en_passant.row == row) {
+			if(column + 1 == b.en_passant.column)
+				moves.add(new Square(column + 1, row + dir));
+					
+			if(column - 1 == b.en_passant.column)
+				moves.add(new Square(column - 1, row + dir));
+		}
 		return moves;
 	}
 

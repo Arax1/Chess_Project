@@ -49,19 +49,22 @@ public class Chess {
 
 					int new_row = s2.row;
 					int new_col = s2.column;
-					System.out.println(s1 + " getting to: " + s2);
+					//System.out.println(s1 + " getting to: " + s2);
 
 					if(piece != null && piece.getColor() == pc && piece.moveTo(new_col, new_row, board)) {
 
-						System.out.println(s1 + " has moved to: " + s2);
+						//System.out.println(s1 + " has moved to: " + s2);
 						board.movePiece(s1, s2);
 						turns++;
 
 					}
 
-					else
+					else {
 						System.out.println("Invalid Move");
-
+						
+						System.out.println("Cannot move from " + s1.pos() + " to " + s2.pos());
+					}
+					
 					System.out.print("\n");
 
 					List<Piece> list = (king.getColor() == 'w') ? board.black_pieces : board.white_pieces;
@@ -90,8 +93,14 @@ public class Chess {
 		System.out.println(player + " wins!");
 
 	}
+	
+	public String brak(int a, int b) {
+		return "[" + a + "," + b + "]";
+	}
 
-
+	
+	//literally does nothing, just exists so we can collapse the old code that's commented out.
+	private static void hideOldCode() {
 	/** For quick testing of checkmate, use the following move order:
 	  e2 e4
 	  f7 f6
@@ -184,4 +193,5 @@ public class Chess {
 		return ret;
 	}
 	 */
+	}
 }

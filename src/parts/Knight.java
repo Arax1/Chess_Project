@@ -86,7 +86,7 @@ public class Knight implements Piece {
 
 		int o_row = row;
 		int o_col = column;
-		Piece o_p = b.en_passant;
+		Pawn o_p = b.en_passant;
 
 		ArrayList<Square> threat_spots = threat.getAllMoves(b);
 
@@ -121,7 +121,7 @@ public class Knight implements Piece {
 	public ArrayList<Square> getAllMoves(Board b) {
 		// TODO Auto-generated method stub
 		ArrayList<Square> moves = new ArrayList<Square>();
-		Piece o_pas = b.en_passant;
+		Pawn o_pas = b.en_passant;
 
 		for(int col = 0; col < 8; col++) {
 

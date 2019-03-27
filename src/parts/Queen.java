@@ -42,14 +42,18 @@ public class Queen implements Piece {
 		if(c == column && r == row)
 			return false;
 
+		//System.out.println("Checking if a queen at " + brak(column, row) + " threatens " + brak(c,r));
+		
 		int updown = PosOrNeg(r - row);
 		int leftright = PosOrNeg(c - column);
 
-		int tempc = c + leftright;
-		int tempr = r + updown;
+		int tempc = column + leftright;
+		int tempr = row + updown;
+		
+		for(int delta = 1; b.onBoard(tempc,tempr); delta++) {
 
-		for(int delta = 1; b.onBoard(c,r); delta++) {
-
+			//System.out.println("Currently at " + brak(tempc, tempr));
+			
 			if(c == tempc && r == tempr)
 				return true;
 
@@ -79,8 +83,8 @@ public class Queen implements Piece {
 		if(!threatens(c,r,b))
 			return false;
 
-		if(b.board[c][r].filled)
-			if(b.board[c][r].p.getColor() == color)
+		if(b.filled(c,r))
+			if(b.colorAt(c,r) == color)
 				return false;
 
 		b.en_passant = null;
@@ -90,7 +94,7 @@ public class Queen implements Piece {
 
 		int o_row = row;
 		int o_col = column;
-		Piece o_p = b.en_passant;
+		Pawn o_p = b.en_passant;
 
 		ArrayList<Square> threat_spots = threat.getAllMoves(b);
 
@@ -144,10 +148,14 @@ public class Queen implements Piece {
 		return column;
 	}
 
+	public String brak(int a, int b) {
+		return "[" + a + "," + b + "]";
+	}
+	
 	@Override
 	public ArrayList<Square> getAllMoves(Board b) {
 		ArrayList<Square> moves = new ArrayList<Square>();
-		Piece o_pas = b.en_passant;
+		Pawn o_pas = b.en_passant;
 
 		//up
 		for(int r = row + 1; r < 8; r++) {
