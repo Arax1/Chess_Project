@@ -95,6 +95,9 @@ public class Board {
 	//adds a new piece to the board and all that that entails.
 	public void addPiecePlay(int c, int r, Piece p) {
 
+		if(p == null)
+			return;
+		
 		board[c][r].putPiece(p);
 
 		if(p.getColor() == 'w') {
@@ -199,6 +202,9 @@ public class Board {
 	
 	//tries to move a piece from one spot to another
 	public boolean tryMove(Square oldspot, Square newspot, String promote) {
+		if(!transientmove(oldspot, newspot))
+			return false;
+		
 		if(!oldspot.p.moveTo(newspot.column, newspot.row, this))
 			return false;
 		
@@ -207,6 +213,9 @@ public class Board {
 		return true;
 	}
 	public boolean tryMove(int oc, int or, int nc, int nr) {
+		if(!transientmove(oc, or, nc, nr))
+			return false;
+		
 		if(!(board[oc][or].p.moveTo(nc, nr, this)))
 			return false;
 		
@@ -218,6 +227,59 @@ public class Board {
 	//just check if a move is possible, don't actually do it
 	public boolean transientmove(Piece p, Square s) {
 		
+		/* Steps:
+		 * 1 - save the old piece and en passant
+		 * 2 - check if you can actually move there
+		 * 3 - move there (temporarily)
+		 * 4 - check for opposing check
+		 * 5 - undo move new piece
+		 * 6 - replace old piece and en passant
+		 * 7 - return findings
+		 */
+		
+		//1 - save the old piece
+		Piece prev = s.p;
+		Pawn ep = en_passant;
+		
+		//System.out.println("1: " + prev + " " + ep);
+		
+		//2 - check if you can actually move there
+		if(!p.moveTo(s.column, s.row, this))
+			return false;
+		
+		//System.out.println("2: " + board[s.column][s.row]);
+		
+		//3 - move there (temporarily)
+		int oldc = p.column, oldr = p.row;
+		movePiece(p.column, p.row, s.column, s.row);
+		
+		//System.out.println("3: " + board[s.column][s.row]);
+		
+		//4 - check for opposing check
+		boolean ret = !inCheck(p.color);
+		
+		//System.out.println("4: " + ret);
+		
+		//5 - undo move new piece
+		movePiece(s.column, s.row, oldc, oldr);
+		
+		//System.out.println("5: ");
+		
+		//6 - replace old piece and en passant
+		addPiecePlay(s.column, s.row, prev);
+		en_passant = ep;
+		
+		//System.out.println("7");
+		
+		//7 - return findings
+		return ret;
+		
+	}
+	public boolean transientmove(int oc, int or, int nc, int nr) {
+		return transientmove(board[oc][or].p, board[nc][nr]);
+	}
+	public boolean transientmove(Square os, Square ns) {
+		return transientmove(os.p, ns);
 	}
 	
 	public void Promotion(String promote, int column, int row) {
@@ -396,7 +458,7 @@ public class Board {
 		b.addPiecePlay(0, 0, new Queen(0, 0, 'w'));
 		
 		b.printBoard();
-		//b.movePiece(1, 7, 0, 7);
+		System.out.println("" + b.transientmove(1, 7, 2, 7));
 		b.printBoard();
 	}
 }

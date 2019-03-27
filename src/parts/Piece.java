@@ -28,7 +28,7 @@ public abstract class Piece {
 			if(board.colorAt(c,r) == color)
 				return false;
 
-		Piece king = (getColor() == 'w') ? board.white_king : board.black_king;
+		/*Piece king = (getColor() == 'w') ? board.white_king : board.black_king;
 
 		board.movePiece(column, row, c, r);
 
@@ -37,7 +37,7 @@ public abstract class Piece {
 			board.movePiece(c, r, o_col, o_row);
 			board.en_passant = o_p;
 			return true;
-		}
+		}*/
 
 		board.en_passant = null;
 		return true;
