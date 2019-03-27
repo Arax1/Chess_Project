@@ -1,7 +1,5 @@
 package parts;
 
-import java.util.ArrayList;
-
 public class Bishop extends Piece {
 
 	private int column, row;
@@ -73,28 +71,6 @@ public class Bishop extends Piece {
 		return false;
 
 	}
-
-	@Override
-	public boolean moveTo(int c, int r, Board b) {
-		// TODO Auto-generated method stub
-
-		//System.out.println("Current Row and Collumn: " + row + " " + column);
-		//System.out.println("Destination Row and Collumn: " + r + " " + c);
-
-		if(!threatens(c,r,b))
-			return false;
-
-		if(b.board[c][r].filled) {
-			char pcolor = b.board[c][r].p.getColor();
-			// System.out.println("Piece: " + b.board[c][r].p + " Color: " + pcolor );
-			if(pcolor == color)
-				return false;
-		}
-
-		b.en_passant = null;
-		return true;
-	}
-
 
 	public String toString() {
 		return getColor() + "B";

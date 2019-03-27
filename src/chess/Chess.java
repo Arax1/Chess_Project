@@ -7,7 +7,6 @@
 
 package chess;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -73,10 +72,9 @@ public class Chess {
 					int new_col = s2.column;
 					//System.out.println(s1 + " getting to: " + s2);
 
-					if(piece != null && piece.getColor() == pc && piece.moveTo(new_col, new_row, board)) {
+					if(piece != null && piece.getColor() == pc && board.tryMove(s1, s2, third)) {
 
 						//System.out.println(s1 + " has moved to: " + s2);
-						board.movePiece(s1, s2, third);
 						turns++;
 
 					}
@@ -122,6 +120,9 @@ public class Chess {
 	}
 	
 	public static String brak(int a, int b) {
+		
+		hideOldCode(); //does nothing
+		
 		return "[" + a + "," + b + "]";
 	}
 

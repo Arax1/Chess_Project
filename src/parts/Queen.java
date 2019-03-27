@@ -77,21 +77,6 @@ public class Queen extends Piece {
 		return 1;
 	}
 
-	@Override
-	public boolean moveTo(int c, int r, Board b) {
-		// TODO Auto-generated method stub
-		if(!threatens(c,r,b))
-			return false;
-
-		if(b.filled(c,r))
-			if(b.colorAt(c,r) == color)
-				return false;
-
-		b.en_passant = null;
-		return true;
-	}
-	
-
 	public String toString() {
 		return getColor() + "Q";
 	}
@@ -126,7 +111,6 @@ public class Queen extends Piece {
 	@Override
 	public ArrayList<Square> getAllMoves(Board b) {
 		ArrayList<Square> moves = new ArrayList<Square>();
-		Pawn o_pas = b.en_passant;
 
 		//up
 		for(int r = row + 1; r < 8; r++) {

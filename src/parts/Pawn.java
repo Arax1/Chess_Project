@@ -50,7 +50,7 @@ public class Pawn extends Piece {
 
 	@Override
 	public boolean threatens(int c, int r, Board board) {
-		if(c < 0 || c > 7 || r < 0 || r > 7)
+		if(!board.onBoard(c, r))
 			return false;
 
 		int direction = (color == 'w') ? 1 : -1;
@@ -80,7 +80,7 @@ public class Pawn extends Piece {
 				return true;
 			}
 
-			else if(newr == row + direction + hop && newc == column && (!b.board[newc][newr].filled)) {
+			else if(newr == row + direction + hop && newc == column && (!b.filled(newc,newr))) {
 				hasmoved = true;
 				b.en_passant = this;
 				return true;
@@ -90,16 +90,16 @@ public class Pawn extends Piece {
 		if(threatens(newc, newr, b)) {
 
 			//regular taking a piece
-			if(b.board[newc][newr].filled && b.board[newc][newr].p.getColor() != color) {
+			if(b.filled(newc,newr) && b.colorAt(newc,newr) != color) {
 				hasmoved = true;
 				b.en_passant = null;
 				return true;
 			}
 
 			//en passant
-			else if(b.board[newc][row].filled) {
-				if(b.board[newc][row].p instanceof Pawn) {
-					if(b.board[newc][row].p.equals(b.en_passant)) {
+			else if(b.filled(newc, newr)) {
+				if(b.pieceAt(newc,newr) instanceof Pawn) {
+					if(b.pieceAt(newc,newr).equals(b.en_passant)) {
 
 						@SuppressWarnings("unused")
 						Piece pas = b.board[newc][row].removePiece();
