@@ -8,7 +8,14 @@ public class Rook extends Piece {
 	private char color;
 
 	public boolean hasmoved;
-
+	
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * 
+	 * Constructor for Rook
+	 */
 	public Rook(int c, int r) {
 		column = c;
 		row = r;
@@ -16,6 +23,14 @@ public class Rook extends Piece {
 		color = (r == 7) ? 'b' : 'w';
 		hasmoved = false;
 	}
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @param co
+	 * 
+	 * Constructor for Rook
+	 */
 	public Rook(int c, int r, char co) {
 		column = c;
 		row = r;
@@ -41,6 +56,11 @@ public class Rook extends Piece {
 	}
 
 	@Override
+	/**
+	 * @return 
+	 * 
+	 * Threatens method for rook
+	 */
 	public boolean threatens(int c, int r, Board b) {
 		if(c != column && r != row)
 			return false;
@@ -84,6 +104,10 @@ public class Rook extends Piece {
 		return false;
 	}
 
+	
+	/**
+	 * Moveto method for rook
+	 */
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
 		boolean canmove = super.moveTo(c, r, b);
@@ -93,7 +117,12 @@ public class Rook extends Piece {
 
 		return canmove;
 	}
-
+	
+	
+	/**
+	 * canBlockPiece method for rook
+	 */
+	@Override
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = row;
@@ -137,6 +166,7 @@ public class Rook extends Piece {
 	public char getColor() {
 		return color;
 	}
+	
 	@Override
 	public int getRow() {
 		// TODO Auto-generated method stub

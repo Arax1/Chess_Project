@@ -14,10 +14,12 @@ public class Square {
 	
 	/**
 	 * 
+	 * 
 	 * @param c
 	 * @param r
 	 * 
-	 * Square constructor for column and row
+	 * Square constructor for Column and Row
+	 * 
 	 */
 	public Square(int c, int r) {
 		row = r;
