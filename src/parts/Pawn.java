@@ -3,6 +3,7 @@ package parts;
 import java.util.ArrayList;
 
 public class Pawn extends Piece {
+	
 	private int column, row;
 	private char color;
 

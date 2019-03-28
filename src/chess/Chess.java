@@ -2,7 +2,18 @@
  * @author Anand Raju
  * @author Sammy Berger
  * 
- * <h1>Main Chess Program<h1>
+ * <h1>Main Chess Program</h1>
+ * 
+ *
+ * This program simulates a real chess game, where each player takes turns to control the board 
+ * and put the opponent's king into checkmate! Each player's moves are constrained by the rules of the game, and are
+ * able to use special moves such as castling, en passant and promotion of pieces. 
+ * 
+ * To move your piece, simply type in the command line [rankFile1] [rankfile2], where rankfile1 is the piece you want to move,
+ * and rankfile2 is spot you want to move the piece to.
+ * 
+ * To quit, simply type in "resign" and to draw, type in [rankFile1] [rankFile2] "draw?"
+ *
  * 
  * */
 
@@ -157,7 +168,7 @@ public class Chess {
 	
 	//literally does nothing, just exists so we can collapse the old code that's commented out.
 	private static void hideOldCode() {
-	/** For quick testing of checkmate, use the following move order:
+	/* For quick testing of checkmate, use the following move order:
 	  e2 e4
 	  f7 f6
 	  f1 e2
@@ -167,7 +178,7 @@ public class Chess {
 
 
 	//this code has been deprecated
-	/**	public static boolean resolve_check(Board b, King k) {
+	/*	public static boolean resolve_check(Board b, King k) {
 
 		//basically, just brute force check every possible location
 		Board newboard = new Board();
