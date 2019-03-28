@@ -50,34 +50,50 @@ public class Rook extends Piece {
 
 		if(c == column) {
 			int direction = (r > row) ? 1 : -1;
-			for(int x = row + direction; x != r; x += direction)
-				if(b.filled(c,x))
-					return false;
+			for(int x = row + direction; x != r; x += direction) {
+
+				if(b.onBoard(c,x)) {
+					if(b.board[c][x].filled) {
+						return false;
+					}
+				} else {
+					break;
+				}
+			}
 
 			return true;
 		}
 
 		if(r == row) {
 			int direction = (c > column) ? 1 : -1;
-			for(int x = column + direction; x != c; x+= direction)
-				if(b.filled(x,r))
-					return false;
+			for(int x = column + direction; x != c; x+= direction) {
+
+				if(b.onBoard(c,x)) {
+					if(b.board[c][x].filled) {
+						return false;
+					}
+				} else {
+					break;
+				}
+
+			}
 
 			return true;
 		}
 
 		return false;
 	}
+
 	@Override
 	public boolean moveTo(int c, int r, Board b) {
 		boolean canmove = super.moveTo(c, r, b);
-		
+
 		if(!hasmoved && canmove)
 			hasmoved = true;
-			
+
 		return canmove;
 	}
-	
+
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = row;
@@ -101,7 +117,7 @@ public class Rook extends Piece {
 				}
 
 				else {
-					
+
 					b.movePiece(s.column, s.row, o_col, o_row);
 					b.en_passant = o_p;
 					hasmoved = old_moved;
@@ -109,7 +125,7 @@ public class Rook extends Piece {
 			}
 
 		}
-		
+
 
 		return false;
 	}
