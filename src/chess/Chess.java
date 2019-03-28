@@ -7,11 +7,9 @@
 
 package chess;
 
-import java.util.List;
 import java.util.Scanner;
 
 import parts.Board;
-import parts.King;
 import parts.Piece;
 import parts.Square;
 
@@ -30,6 +28,8 @@ public class Chess {
 		char pc;
 		Piece king;
 
+		boolean cantMove, inCheck;
+		
 		String str;
 
 		while (true) {
@@ -68,8 +68,6 @@ public class Chess {
 					
 					Piece piece = (s1.filled) ? s1.p : null;
 
-					int new_row = s2.row;
-					int new_col = s2.column;
 					//System.out.println(s1 + " getting to: " + s2);
 
 					if(piece != null && piece.getColor() == pc && board.tryMove(s1, s2, third)) {
@@ -80,12 +78,12 @@ public class Chess {
 					}
 
 					else {
-						System.out.println("Invalid Move");
+						System.out.println("Illegal move, try again");
 						
-						System.out.println("Cannot move from " + s1.pos() + " to " + s2.pos());
+						//System.out.println("Cannot move from " + s1.pos() + " to " + s2.pos());
 					}
 					
-					System.out.print("\n");
+					/*System.out.print("\n");
 
 					List<Piece> list = (king.getColor() == 'w') ? board.black_pieces : board.white_pieces;
 					List<Piece> checks = board.threatens_spot(list, king.getColumn(), king.getRow());
@@ -94,7 +92,28 @@ public class Chess {
 
 						//check for checkmate on OPPOSING king
 						checkmate = board.resolve_check(checks, (King) king);
+					} */
+
+					inCheck = board.inCheck(turns % 2 == 1 ? 'b' : 'w');
+					cantMove = !board.canMove(turns % 2 == 1 ? 'b' : 'w');
+					
+					
+					//System.out.println("checking special conditions:");
+					if(cantMove && inCheck) {
+						System.out.println("Checkmate");
+						checkmate = true;
+						break;
 					}
+					else if(cantMove && !inCheck) {
+						System.out.println("Stalemate");
+						draw = true;
+						break;
+					}
+					else if(!cantMove && inCheck) {
+						System.out.println("Check");
+					}/**/
+					
+					System.out.println();
 
 			}
 
@@ -124,7 +143,7 @@ public class Chess {
 	
 	public static String brak(int a, int b) {
 		
-		hideOldCode(); //does nothing
+		hideOldCode(); //does nothing, just is there so that there isn't a warning for never using the method
 		
 		return "[" + a + "," + b + "]";
 	}

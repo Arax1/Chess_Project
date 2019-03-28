@@ -61,7 +61,9 @@ public class King extends Piece {
 		if(c == column && r == row)
 			return false;
 
-			
+		if(b.filled(c,r) && b.colorAt(c, r) == color)
+			return false;
+		
 			/* Things to check!
 			 * 
 			 * 1 - New space threatened? If so, false.

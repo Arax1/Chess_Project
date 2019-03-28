@@ -51,7 +51,7 @@ public class Rook extends Piece {
 		if(c == column) {
 			int direction = (r > row) ? 1 : -1;
 			for(int x = row + direction; x != r; x += direction)
-				if(b.board[c][x].filled)
+				if(b.filled(c,x))
 					return false;
 
 			return true;
@@ -60,7 +60,7 @@ public class Rook extends Piece {
 		if(r == row) {
 			int direction = (c > column) ? 1 : -1;
 			for(int x = column + direction; x != c; x+= direction)
-				if(b.board[x][r].filled)
+				if(b.filled(x,r))
 					return false;
 
 			return true;
