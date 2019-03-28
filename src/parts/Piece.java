@@ -3,46 +3,46 @@ package parts;
 import java.util.ArrayList;
 
 public abstract class Piece {
-	
+
 	protected int row;
 	protected int column;
-	
+
 	protected char color;
-	
+
 	public boolean threatens(int c, int r, Board board) {
 		return false;
 	}
 	public boolean moveTo(int c, int r, Board board) {
-		
+
 		int o_row = row;
 		int o_col = column;
 		Pawn o_p = board.en_passant;
-		
+
 		if(!threatens(c,r,board))
 			return false;
-		
+
 		if(c == column && r == row)
 			return false;
 
 		if(board.filled(c,r))
 			if(board.colorAt(c,r) == color)
 				return false;
-		
-		/* Piece king = (getColor() == 'w') ? board.white_king : board.black_king;
-			
+
+		/*Piece king = (getColor() == 'w') ? board.white_king : board.black_king;
+
 		board.movePiece(column, row, c, r);
-		
+
 		if(!board.threatened(king.getColumn(), king.getRow(), king.getColor())) {
-			
+
 			board.movePiece(c, r, o_col, o_row);
 			board.en_passant = o_p;
 			return true;
-		} */
-		
+		}*/
+
 		board.en_passant = null;
 		return true;
 	}
-	
+
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = row;
@@ -58,50 +58,50 @@ public abstract class Piece {
 				b.movePiece(column, row, s.column, s.row);
 
 				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
-					
+
 					if(!b.threatened(victim.getColumn(), victim.getRow(), victim.getColor())) {
-						
+
 						b.movePiece(s.column, s.row, o_col, o_row);
 						b.en_passant = o_p;
 						return true;
-					} 
-					
-					
+					}
+
+
 				}
 
 				else {
-					
+
 					b.movePiece(s.column, s.row, o_col, o_row);
 					b.en_passant = o_p;
 				}
 			}
 
 		}
-		
+
 
 		return false;
 	}
-	
+
 	public char getColor() {
 		return color;
 	}
-	
+
 	public int getRow() {
 		return row;
 	}
 	public int getColumn() {
 		return column;
 	}
-	
+
 	public void setRow(int r) {
 		row = r;
 	}
-	
+
 	public void setColumn(int c) {
-		
+
 		column = c;
 	}
-	
+
 	public ArrayList<Square> getAllMoves(Board b) {
 		// TODO Auto-generated method stub
 		ArrayList<Square> moves = new ArrayList<Square>();
@@ -120,5 +120,5 @@ public abstract class Piece {
 
 		return moves;
 	}
-	
+
 }

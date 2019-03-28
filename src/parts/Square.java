@@ -18,6 +18,9 @@ public class Square {
 	}
 	
 	public void putPiece(Piece in) {
+		if(in == null)
+			return;
+		
 		
 		p = in;
 		p.setRow(row);
