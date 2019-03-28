@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+
 package parts;
 
 import java.util.*;
@@ -130,8 +134,9 @@ public class King extends Piece {
 		b.en_passant = null;
 		return true;
 	}
-	
 	public boolean transientMoveTo(int c, int r, Board b) {
+		//System.out.println(toString() + " will attempt to move to " + "[" + c + "," + r + "]");
+		
 		if(!b.onBoard(c,r))
 			return false;
 		
@@ -157,9 +162,12 @@ public class King extends Piece {
 			 */
 			
 		//1 - New space threatened? If so, false.
-		if(b.threatened(c, r, color))
+		if(b.threatened(c, r, color)) {
 			return false;
+		}
 			
+		//System.out.println("new space not threatened");
+		
 		//2 - New space in distance 1? If so, true.
 		if(threatens(c,r,b) && b.colorAt(c, r) != color) {
 			return true;

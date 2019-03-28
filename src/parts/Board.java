@@ -390,7 +390,7 @@ public class Board {
 			
 			for(Square s: p.getAllMoves(this))
 				if(transientmove(p,s)) {
-					System.out.println(p + " to " + s.pos());
+					//System.out.println(p + " to " + s.pos());
 					return true;
 				}
 		}
@@ -495,7 +495,7 @@ public class Board {
 	public void printBoard() {
 		System.out.println(toString() + "\n");
 	}
-
+	
 	public static void main(String[] args) {
 		Board b = blankBoard();
 		
@@ -503,6 +503,8 @@ public class Board {
 		b.addPiecePlay(new Rook(2,2,'w'));
 		b.addPiecePlay(new Rook(4,4,'w'));
 		b.addPiecePlay(new Rook(2,4,'w'));
+		
+		b.tryMove(3, 3, 4, 3);
 		
 		boolean inCheck = b.inCheck('b');
 		boolean cantMove = !b.canMove('b');
