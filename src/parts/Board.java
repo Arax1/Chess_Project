@@ -4,6 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.*;
 
+/**
+ * 
+ * @author Anand Raju
+ * @author Sammy Berger
+ *
+ *
+ * The board class is an 8x8 array of squares that hold all of the pieces. 
+ * 
+ * Keeps track of all the pieces that are currently in play, 
+ * including which Pawn is able to be taken in an en passant manuver
+ */
+
 public class Board {
 
 	public Square[][] board;
@@ -14,6 +26,9 @@ public class Board {
 	public King black_king;
 	public King white_king;
 
+	/**
+	 * Constructor for the board class, loads an 8x8 board with all black and white pieces
+	 */
 	public Board() {
 
 		board = new Square[8][8];
@@ -73,7 +88,7 @@ public class Board {
 	}
 
 	
-	//makes a blank board for testing purposes
+	/*
 	public static Board blankBoard() {
 		Board b = new Board();
 		b.board = new Square[8][8];
@@ -87,12 +102,20 @@ public class Board {
 				b.board[c][r] = new Square(c,r);
 		
 		return b;
-	}
+	} */
+	
 	public static String brak(int a, int b) {
 		return "[" + a + "," + b + "]";
 	}
 	
-	//adds a new piece to the board and all that that entails.
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @param p
+	 * 
+	 * Adds a new piece to the board that is in play
+	 */
 	public void addPiecePlay(int c, int r, Piece p) {
 
 		if(p == null)
@@ -119,19 +142,23 @@ public class Board {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @param p
+	 * 
+	 * Overloaded method of addPiecePlay
+	 */
 	public void addPiecePlay(Piece p) {
 		addPiecePlay(p.getColumn(), p.getRow(), p);
 	}
 	
-	//get the specified tile
-	public Square getTileAt(int c, int r) {
-
-		return board[c][r];
-
-	}
-	public Square getTileAt(Square s) {
-		return getTileAt(s.column, s.row);
-	}
+	/**
+	 * 
+	 * @param s
+	 * @return Returns square based on String rank and file input.
+	 */
 	public Square getTileAt(String s) {
 
 		int row = s.charAt(0) - 'a';
@@ -150,8 +177,40 @@ public class Board {
 		return board[boundrow][boundcol];
 
 	}
+	
+	
+	/**
+	 * 
+	 * @param s
+	 * @return Returns tile based on Square
+	 */
+	public Square getTileAt(Square s) {
+		return getTileAt(s.column, s.row);
+	}
+	
+	
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @return Returns tile based on Column and Row
+	 */
+	public Square getTileAt(int c, int r) {
 
-	//moves a piece from one spot to another
+		return board[c][r];
+
+	}
+	
+
+	/**
+	 * 
+	 * @param oldspot
+	 * @param newspot
+	 * @param promote
+	 * 
+	 * Moves a Piece on the board from one spot or another based on S, if moving a pawn to end of enemy line, 
+	 * uses String promote to determine pawn promotion
+	 */
 	public void movePiece(Square oldspot, Square newspot, String promote) {
 
 		Piece piece = oldspot.removePiece();
@@ -179,6 +238,16 @@ public class Board {
 			newspot.putPiece(piece);
 		}
 	}
+	
+	/**
+	 * 
+	 * @param oc
+	 * @param or
+	 * @param nc
+	 * @param nr
+	 * 
+	 * Overloaded method of movePiece that takes in only rows and columns
+	 */
 	public void movePiece(int oc, int or, int nc, int nr) {
 		
 		Piece piece = board[oc][or].removePiece();
@@ -203,7 +272,13 @@ public class Board {
 		
 	}
 	
-	//tries to move a piece from one spot to another
+	/**
+	 * 
+	 * @param oldspot
+	 * @param newspot
+	 * @param promote
+	 * @return Returns true if board is able to physically move a piece into a spot
+	 */
 	public boolean tryMove(Square oldspot, Square newspot, String promote) {
 		if(!transientmove(oldspot, newspot)) {
 			System.out.println("failed the transient move");
@@ -496,7 +571,7 @@ public class Board {
 		System.out.println(toString() + "\n");
 	}
 
-	public static void main(String[] args) {
+	/* public static void main(String[] args) {
 		Board b = blankBoard();
 		
 		b.addPiecePlay(new King(3,3,'b'));
@@ -519,5 +594,5 @@ public class Board {
 		} else {
 			System.out.println("Not in check and can move?");
 		}
-	}
+	} */
 }

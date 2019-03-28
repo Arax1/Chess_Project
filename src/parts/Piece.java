@@ -2,16 +2,38 @@ package parts;
 
 import java.util.ArrayList;
 
+/**
+ * abstract class that all board pieces inherit from
+ * 
+ * @author Anand Raju
+ * @author Sammy Berger
+ *
+ */
 public abstract class Piece {
 
 	protected int row;
 	protected int column;
 
 	protected char color;
-
+	
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @param board
+	 * @return Returns true if this piece threatens a space with column c and row r on a board
+	 */
 	public boolean threatens(int c, int r, Board board) {
 		return false;
 	}
+	
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @param board
+	 * @return Returs true if this piece can actually move to a space on the board
+	 */
 	public boolean moveTo(int c, int r, Board board) {
 
 		int o_row = getRow();
@@ -42,7 +64,14 @@ public abstract class Piece {
 		board.en_passant = null;
 		return true;
 	}
-
+	
+	/**
+	 * 
+	 * @param threat
+	 * @param victim
+	 * @param b
+	 * @return Returns true if this piece can block Piece threat from capturing Piece victim
+	 */
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = getRow();
@@ -81,27 +110,53 @@ public abstract class Piece {
 
 		return false;
 	}
-
+	
+	/**
+	 * 
+	 * @return gets color of piece
+	 */
 	public char getColor() {
 		return color;
 	}
 
+	/**
+	 * 
+	 * @return gets row of piece
+	 */
 	public int getRow() {
 		return row;
 	}
+	
+	
+	/**
+	 * 
+	 * @return gets column of piece
+	 */
 	public int getColumn() {
 		return column;
 	}
 
+	/**
+	 * 
+	 * @return sets row of piece
+	 */
 	public void setRow(int r) {
 		row = r;
 	}
 
+	/**
+	 * 
+	 * @return sets column of piece
+	 */
 	public void setColumn(int c) {
 
 		column = c;
 	}
 
+	/**
+	 * 
+	 * @return Returns a list of all valid squares on a piece
+	 */
 	public ArrayList<Square> getAllMoves(Board b) {
 		// TODO Auto-generated method stub
 		ArrayList<Square> moves = new ArrayList<Square>();
