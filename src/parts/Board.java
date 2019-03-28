@@ -571,13 +571,17 @@ public class Board {
 		System.out.println(toString() + "\n");
 	}
 
+
 	/* public static void main(String[] args) {
+
 		Board b = blankBoard();
 		
 		b.addPiecePlay(new King(3,3,'b'));
 		b.addPiecePlay(new Rook(2,2,'w'));
 		b.addPiecePlay(new Rook(4,4,'w'));
 		b.addPiecePlay(new Rook(2,4,'w'));
+		
+		b.tryMove(3, 3, 4, 3);
 		
 		boolean inCheck = b.inCheck('b');
 		boolean cantMove = !b.canMove('b');

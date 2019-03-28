@@ -176,4 +176,7 @@ public abstract class Piece {
 		return moves;
 	}
 
+	public static String brak(int a, int b) {
+		return "[" + a + "," + b + "]";
+	}
 }

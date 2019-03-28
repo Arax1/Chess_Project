@@ -62,18 +62,25 @@ public class Rook extends Piece {
 	 * Threatens method for rook
 	 */
 	public boolean threatens(int c, int r, Board b) {
-		if(c != column && r != row)
+		
+		if(c != column && r != row) {
 			return false;
+		}
 
-		if(c == column && c == row)
+		if(c == column && r == row) {
 			return false;
-
+		}
+		
 		if(c == column) {
+			
 			int direction = (r > row) ? 1 : -1;
+			
+			
 			for(int x = row + direction; x != r; x += direction) {
 
+				
 				if(b.onBoard(c,x)) {
-					if(b.board[c][x].filled) {
+					if(b.filled(c,x)) {
 						return false;
 					}
 				} else {
@@ -104,7 +111,6 @@ public class Rook extends Piece {
 		return false;
 	}
 
-	
 	/**
 	 * Moveto method for rook
 	 */
