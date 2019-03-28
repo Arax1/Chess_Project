@@ -14,18 +14,18 @@ public abstract class Piece {
 	}
 	public boolean moveTo(int c, int r, Board board) {
 
-		int o_row = row;
-		int o_col = column;
+		int o_row = getRow();
+		int o_col = getColumn();
 		Pawn o_p = board.en_passant;
 
 		if(!threatens(c,r,board))
 			return false;
 
-		if(c == column && r == row)
+		if(c == getColumn() && r == getRow())
 			return false;
 
 		if(board.filled(c,r))
-			if(board.colorAt(c,r) == color)
+			if(board.colorAt(c,r) == getColor())
 				return false;
 
 		/*Piece king = (getColor() == 'w') ? board.white_king : board.black_king;
@@ -45,8 +45,8 @@ public abstract class Piece {
 
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
-		int o_row = row;
-		int o_col = column;
+		int o_row = getRow();
+		int o_col = getColumn();
 		Pawn o_p = b.en_passant;
 
 		ArrayList<Square> threat_spots = threat.getAllMoves(b);
@@ -55,7 +55,7 @@ public abstract class Piece {
 
 			if(moveTo(s.column, s.row, b)) {
 
-				b.movePiece(column, row, s.column, s.row);
+				b.movePiece(getColumn(), getRow(), s.column, s.row);
 
 				if(!threat.threatens(victim.getColumn(), victim.getRow(), b)) {
 

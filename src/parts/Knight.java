@@ -58,7 +58,7 @@ public class Knight extends Piece {
 				return true;
 		}
 
-		else if(rindex_2 >= 0 && rindex_2 < 8 && cindex_2 >= 0 && cindex_2 < 8){
+		if(rindex_2 >= 0 && rindex_2 < 8 && cindex_2 >= 0 && cindex_2 < 8){
 
 			if(r == rindex_2 && c == cindex_2)
 				return true;

@@ -206,7 +206,7 @@ public class Board {
 	//tries to move a piece from one spot to another
 	public boolean tryMove(Square oldspot, Square newspot, String promote) {
 		if(!transientmove(oldspot, newspot)) {
-			//System.out.println("failed the transient move");
+			System.out.println("failed the transient move");
 			return false;
 		}
 		
