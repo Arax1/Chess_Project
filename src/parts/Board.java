@@ -390,7 +390,7 @@ public class Board {
 			
 			for(Square s: p.getAllMoves(this))
 				if(transientmove(p,s)) {
-					System.out.println(p + " to " + s.pos());
+					//System.out.println(p + " to " + s.pos());
 					return true;
 				}
 		}
