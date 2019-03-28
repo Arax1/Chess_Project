@@ -22,12 +22,13 @@ public class Chess {
 		int turns = 0;
 		boolean checkmate = false;
 		boolean draw = false;
+		boolean invalidmove = false;
 
 		Board board = new Board();
 		Scanner scan = new Scanner(System.in);
 		String player = "White";
 		char pc;
-		Piece king;
+		//Piece king;
 
 		boolean cantMove, inCheck;
 		
@@ -40,11 +41,12 @@ public class Chess {
 				break;
 			}
 			
-			board.printBoard();
+			if(!invalidmove)
+				board.printBoard();
 
 			pc = turns % 2 == 0 ? 'w' : 'b';
 			player = turns % 2 == 0 ? "White" : "Black";
-			king = (pc == 'w')? board.black_king: board.white_king;
+			//king = (pc == 'w')? board.black_king: board.white_king;
 				
 
 			System.out.print(player + "'s move: ");
@@ -73,6 +75,8 @@ public class Chess {
 
 					if(piece != null && piece.getColor() == pc && board.tryMove(s1, s2, third)) {
 
+						invalidmove = false;
+						
 						//System.out.println(s1 + " has moved to: " + s2);
 						turns++;
 
@@ -80,6 +84,7 @@ public class Chess {
 
 					else {
 						System.out.println("Illegal move, try again");
+						invalidmove = true;
 						
 						//System.out.println("Cannot move from " + s1.pos() + " to " + s2.pos());
 					}
