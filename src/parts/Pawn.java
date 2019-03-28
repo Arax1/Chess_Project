@@ -9,13 +9,28 @@ public class Pawn extends Piece {
 
 	public boolean hasmoved = false;
 
-	//given a row, column and color
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @param co
+	 * 
+	 * Constructor for Pawn
+	 */
 	public Pawn(int c, int r, char co) {
 		row = r;
 		column = c;
 		color = co;
 	}
-	//assume basic setup, determine color yourself
+	
+
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * 
+	 * Constructor for Pawn
+	 */
 	public Pawn(int c, int r) {
 		row = r;
 		column = c;
@@ -50,6 +65,9 @@ public class Pawn extends Piece {
 	}
 
 	@Override
+	/**
+	 * Threatens method for Pawn
+	 */
 	public boolean threatens(int c, int r, Board board) {
 		if(!board.onBoard(c, r))
 			return false;
@@ -65,6 +83,10 @@ public class Pawn extends Piece {
 		return false;
 	}
 	@Override
+	
+	/**
+	 * Moveto for pawn
+	 */
 	public boolean moveTo(int newc, int newr, Board b) {
 
 		//System.out.println("Current Row and Collumn: " + row + " " + column);
@@ -115,6 +137,10 @@ public class Pawn extends Piece {
 		return false;
 	}
 	
+	/**
+	 * canBlockPiece for Pawn
+	 */
+	@Override
 	public boolean canBlockPiece(Piece threat, Piece victim, Board b) {
 
 		int o_row = row;
@@ -152,6 +178,9 @@ public class Pawn extends Piece {
 	}
 
 	@Override
+	/**
+	 * getAllMoves for pawn
+	 */
 	public ArrayList<Square> getAllMoves(Board b) {
 		ArrayList<Square> moves = new ArrayList<Square>();
 
