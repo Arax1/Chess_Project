@@ -234,7 +234,11 @@ public class Board {
 	
 	//just check if a move is possible, don't actually do it
 	public boolean transientmove(Piece p, Square s) {
-			
+		//kings have their own unique movement stuff that actually already checks for all this
+		//so just use their method!
+		if(p instanceof King)
+			return ((King) p).transientMoveTo(s.column, s.row, this);
+		
 		/* Steps:
 		 * 1 - save the old piece and en passant
 		 * 2 - check if you can actually move there
@@ -250,8 +254,6 @@ public class Board {
 			hm = ((Pawn) p).hasmoved;
 		if(p instanceof Rook)
 			hm = ((Rook) p).hasmoved;
-		if(p instanceof King)
-			hm = ((King) p).hasmoved;
 		
 		
 		//1 - save the old piece
@@ -278,8 +280,6 @@ public class Board {
 				((Pawn) p).hasmoved = hm;
 			else if(p instanceof Rook)
 				((Rook) p).hasmoved = hm;
-			if(p instanceof King)
-				((King) p).hasmoved = hm;
 		}
 		
 		//6 - replace old piece and en passant
@@ -390,7 +390,7 @@ public class Board {
 			
 			for(Square s: p.getAllMoves(this))
 				if(transientmove(p,s)) {
-					//System.out.println(p + " to " + s.pos());
+					System.out.println(p + " to " + s.pos());
 					return true;
 				}
 		}
@@ -497,15 +497,27 @@ public class Board {
 	}
 
 	public static void main(String[] args) {
-		Board b = new Board();
-		b.tryMove(4,1,4,3);
-		b.tryMove(5,6,5,5);
-		b.tryMove(5,0,4,1);
-		b.tryMove(6,6,6,4);
-		b.tryMove(4, 1, 7, 4);
-		b.tryMove(0, 6, 0, 5);
+		Board b = blankBoard();
+		
+		b.addPiecePlay(new King(3,3,'b'));
+		b.addPiecePlay(new Rook(2,2,'w'));
+		b.addPiecePlay(new Rook(4,4,'w'));
+		b.addPiecePlay(new Rook(2,4,'w'));
+		
+		boolean inCheck = b.inCheck('b');
+		boolean cantMove = !b.canMove('b');
 		
 		b.printBoard();
-		System.out.println("" + b.canMove('b'));
+		if(cantMove && inCheck) {
+			System.out.println("Checkmate");
+		}
+		else if(cantMove && !inCheck) {
+			System.out.println("Stalemate");
+		}
+		else if(!cantMove && inCheck) {
+			System.out.println("Check");
+		} else {
+			System.out.println("Not in check and can move?");
+		}
 	}
 }
